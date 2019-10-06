@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDFiscalManager.BusinessMo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDFiscalManager.CMDInterface", "MCDFiscalManager.CMDInterface\MCDFiscalManager.CMDInterface.csproj", "{720C6D6A-0D50-4084-83A8-03848F353ED8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDFiscalManager.DataController", "MCDFiscalManager.DataController\MCDFiscalManager.DataController.csproj", "{4512C25D-757C-479B-9FB3-B9C118F08B52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{720C6D6A-0D50-4084-83A8-03848F353ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{720C6D6A-0D50-4084-83A8-03848F353ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{720C6D6A-0D50-4084-83A8-03848F353ED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4512C25D-757C-479B-9FB3-B9C118F08B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4512C25D-757C-479B-9FB3-B9C118F08B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4512C25D-757C-479B-9FB3-B9C118F08B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4512C25D-757C-479B-9FB3-B9C118F08B52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
