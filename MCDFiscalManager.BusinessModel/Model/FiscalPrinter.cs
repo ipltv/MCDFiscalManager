@@ -85,15 +85,5 @@ namespace MCDFiscalManager.BusinessModel.Model
             currentFiscalMemory = fiscalMemory;
         }
         #endregion
-        #region Methods
-        public override string ToString()
-        {
-            return $"[Serial Number:{SerialNumber}; Model:{Model}; Registration Date:{RegistrationDate}; Place Of Installation:{PlaceOfInstallation}; Registration Numder:{RegistrationNumder}; Fiscal Memory:{currentFiscalMemory};]";
-        }
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
-        #endregion
     }
 }
