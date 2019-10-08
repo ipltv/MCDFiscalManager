@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MCDFiscalManager.DataController;
 
 namespace MCDFiscalManager.CMDInterface
 {
@@ -10,6 +6,7 @@ namespace MCDFiscalManager.CMDInterface
     {
         static void Main(string[] args)
         {
+            XMLDocumentController.CreateXMLDocument();
         }
     }
 }

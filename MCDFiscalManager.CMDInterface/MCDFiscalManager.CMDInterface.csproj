@@ -48,5 +48,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCDFiscalManager.DataController\MCDFiscalManager.DataController.csproj">
+      <Project>{4512c25d-757c-479b-9fb3-b9c118f08b52}</Project>
+      <Name>MCDFiscalManager.DataController</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
