@@ -1,4 +1,9 @@
 ﻿using MCDFiscalManager.DataController;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 namespace MCDFiscalManager.CMDInterface
 {
@@ -6,7 +11,9 @@ namespace MCDFiscalManager.CMDInterface
     {
         static void Main(string[] args)
         {
-            XMLDocumentController.CreateXMLDocument();
+            
+            DataController.DataController.CreateTemplateRegistrationFile(new DirectoryInfo(Environment.CurrentDirectory));
+            
         }
     }
 }

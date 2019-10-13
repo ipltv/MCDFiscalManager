@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using MCDFiscalManager.BusinessModel.Model;
 
 namespace MCDFiscalManager.DataController
 {
     public class XMLDocumentController
     {
-        public static bool CreateXMLDocument()
+        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter)
         {
             XDocument doc = new XDocument();
 
@@ -22,7 +23,7 @@ namespace MCDFiscalManager.DataController
 
             XElement document = new XElement("Документ");
             XAttribute CND = new XAttribute("КНД", "1110061");
-            XAttribute documentDate = new XAttribute("ДатаДок","07.10.2019");
+            XAttribute documentDate = new XAttribute("ДатаДок", DateTime.Today);
             XAttribute codeNO = new XAttribute("КодНО", "7701");
 
             document.Add(CND, documentDate, codeNO);
@@ -58,10 +59,10 @@ namespace MCDFiscalManager.DataController
             document.Add(statement);
 
             XElement intelligence = new XElement("СведРегККТ");
-            XAttribute modelKKT = new XAttribute("МоделККТ", "СПАРК-115-Ф");
-            XAttribute numberKKT = new XAttribute("НомерККТ", "009015315");
-            XAttribute modelFN = new XAttribute("МоделФН", "Шифровальное (криптографическое) средство защиты фискальных данных фискальный накопитель «ФН-1.1» исполнение Ав15-2");
-            XAttribute numberFN = new XAttribute("НомерФН", "9280440300244545");
+            XAttribute modelKKT = new XAttribute("МоделККТ", fiscalPrinter.Model);
+            XAttribute numberKKT = new XAttribute("НомерККТ", fiscalPrinter.SerialNumber);
+            XAttribute modelFN = new XAttribute("МоделФН", fiscalPrinter.FiscalMemory.Model);
+            XAttribute numberFN = new XAttribute("НомерФН", fiscalPrinter.FiscalMemory.SerialNumber);
             XAttribute markOffline = new XAttribute("ПрАвтоном", "2");
             XAttribute markLottery = new XAttribute("ПрЛотерея", "2");
             XAttribute markExcitement = new XAttribute("ПрАзарт", "2");
@@ -84,23 +85,23 @@ namespace MCDFiscalManager.DataController
             intelligence.Add(OFD);
 
             XElement installAdress = new XElement("СведАдрМУст");
-            XAttribute installNaim = new XAttribute("НаимМУст", "21012 Кировский");
+            XAttribute installNaim = new XAttribute("НаимМУст", fiscalPrinter.PlaceOfInstallation);
 
             installAdress.Add(installNaim);
             intelligence.Add(installAdress);
 
             XElement adressKKT = new XElement("АдрМУстККТ");
-            XAttribute postCode = new XAttribute("Индекс", "198095");
-            XAttribute regionCode = new XAttribute("КодРегион", "78");
-            XAttribute street = new XAttribute("Улица", "Стачек пл.");
-            XAttribute house = new XAttribute("Дом", "9 д.");
-            XAttribute building = new XAttribute("Корпус", "а стр.");
+            XAttribute postCode = new XAttribute("Индекс", fiscalPrinter.Adress.Postcode);
+            XAttribute regionCode = new XAttribute("КодРегион", fiscalPrinter.Adress.CodeOfRegion);
+            XAttribute street = new XAttribute("Улица", fiscalPrinter.Adress.Street);
+            XAttribute house = new XAttribute("Дом", fiscalPrinter.Adress.House);
+            XAttribute building = new XAttribute("Корпус", fiscalPrinter.Adress.Building);
 
             adressKKT.Add(postCode, regionCode, street, house, building);
             installAdress.Add(adressKKT);
 
             doc.Add(file);
-            doc.Save("test.xml");
+            doc.Save($"{fiscalPrinter.SerialNumber}.xml");
             return true;
         }
     }

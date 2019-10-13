@@ -17,6 +17,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// </summary>
         private string placeOfInstallation;
         private FiscalMemory currentFiscalMemory;
+        private Adress currentAdress;
         #endregion
         #region Properties
         /// <summary>
@@ -49,6 +50,14 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// Регистрационный номер присвоенный фискальному регистратору (ФР) налоговым органом.
         /// </summary>
         public string RegistrationNumder { get; set; }
+        /// <summary>
+        /// Возвращает текущий объект FiscalMemory.
+        /// </summary>
+        public FiscalMemory FiscalMemory { get { return currentFiscalMemory; }
+        /// <summary>
+        /// Возвращает текущий объект Adress.
+        /// </summary>
+        public Adress Adress { get { return currentAdress; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -66,7 +75,8 @@ namespace MCDFiscalManager.BusinessModel.Model
             DateTime? registrationDate = null, 
             string placeOfInstallation = "", 
             string registrationNumber = "", 
-            FiscalMemory fiscalMemory = null)
+            FiscalMemory fiscalMemory = null,
+            Adress adress = null)
         {
             if (string.IsNullOrWhiteSpace(serialNumber))
             {
@@ -83,6 +93,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             Model = model;
             RegistrationDate = registrationDate;          
             currentFiscalMemory = fiscalMemory;
+            currentAdress = adress;
         }
         #endregion
         #region Methods
