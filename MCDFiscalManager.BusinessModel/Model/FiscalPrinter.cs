@@ -15,7 +15,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Поле представляющее место установки фискального принтера
         /// </summary>
-        private string placeOfInstallation;
+        private Store placeOfInstallation;
         private FiscalMemory currentFiscalMemory;
         private Adress currentAdress;
         #endregion
@@ -38,12 +38,12 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Место установки фискального принтера.
         /// </summary>
-        public string PlaceOfInstallation
+        public Store PlaceOfInstallation
         {
             get => placeOfInstallation;
             set
             {
-                placeOfInstallation = value.Trim();
+                placeOfInstallation = value;
             }
         }
         /// <summary>
@@ -53,7 +53,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Возвращает текущий объект FiscalMemory.
         /// </summary>
-        public FiscalMemory FiscalMemory { get { return currentFiscalMemory; }
+        public FiscalMemory FiscalMemory { get { return currentFiscalMemory; } }
         /// <summary>
         /// Возвращает текущий объект Adress.
         /// </summary>
@@ -71,9 +71,9 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <param name="fiscalMemory">Экземпляр класса представляющий фискальный накопитель (ФН) установленный в данном ФР.</param>
         public FiscalPrinter
             (string serialNumber, 
-            string model, 
-            DateTime? registrationDate = null, 
-            string placeOfInstallation = "", 
+            string model,
+            Store placeOfInstallation,
+            DateTime? registrationDate = null,         
             string registrationNumber = "", 
             FiscalMemory fiscalMemory = null,
             Adress adress = null)
