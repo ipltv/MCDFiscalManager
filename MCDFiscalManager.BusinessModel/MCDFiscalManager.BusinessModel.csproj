@@ -45,6 +45,7 @@
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\FiscalMemory.cs" />
     <Compile Include="Model\FiscalPrinter.cs" />
+    <Compile Include="Model\OFD.cs" />
     <Compile Include="Model\Store.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

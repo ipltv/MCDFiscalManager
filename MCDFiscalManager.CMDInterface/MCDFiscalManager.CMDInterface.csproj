@@ -49,6 +49,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MCDFiscalManager.BusinessModel\MCDFiscalManager.BusinessModel.csproj">
+      <Project>{84491d66-1206-4ce6-a837-fb4dc2cdb553}</Project>
+      <Name>MCDFiscalManager.BusinessModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MCDFiscalManager.DataController\MCDFiscalManager.DataController.csproj">
       <Project>{4512c25d-757c-479b-9fb3-b9c118f08b52}</Project>
       <Name>MCDFiscalManager.DataController</Name>
