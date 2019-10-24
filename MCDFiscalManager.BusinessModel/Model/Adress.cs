@@ -21,6 +21,10 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// </summary>
         public string CodeOfRegion { get; set; }
         /// <summary>
+        /// 
+        /// </summary>
+        public string City { get; set; }
+        /// <summary>
         /// Улица
         /// </summary>
         public string Street { get; set; }
@@ -34,7 +38,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         public string Building { get; set; }
         #endregion
         #region Contructors
-        public Adress(string postcode, string codeOfRegion, string street, string house, string building)
+        public Adress(string postcode, string codeOfRegion, string city, string street, string house, string building)
         {
             if (string.IsNullOrWhiteSpace(postcode))
             {
@@ -43,6 +47,10 @@ namespace MCDFiscalManager.BusinessModel.Model
             if (string.IsNullOrWhiteSpace(codeOfRegion))
             {
                 throw new ArgumentNullException("Код региона не может быть пустым или null.", nameof(codeOfRegion));
+            }
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                throw new ArgumentNullException("Название города не может быть пустым или null", nameof(city));
             }
             if (string.IsNullOrWhiteSpace(street))
             {
@@ -55,6 +63,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             Building = building ?? throw new ArgumentNullException("Номер корпуса не может быть пустым", nameof(building));
             Postcode = postcode;
             CodeOfRegion = codeOfRegion;
+            City = city;
             Street = street;
             House = house;
         }
@@ -62,7 +71,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         #region Methods 
         public override string ToString()
         {
-            return $"[Postcode:{Postcode}; CodeOfRegion:{CodeOfRegion}; Street:{Street}; House:{House}; Building:{Building};]";
+            return $"[Postcode:{Postcode}; CodeOfRegion:{CodeOfRegion}; City:{City}; Street:{Street}; House:{House}; Building:{Building};]";
         }
         public override int GetHashCode()
         {

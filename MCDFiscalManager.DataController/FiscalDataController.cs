@@ -18,11 +18,16 @@ namespace MCDFiscalManager.DataController
         private Dictionary<string, Company> companyByShortName;
         private User user;
         private OFD ofd;
+        private Excel.Application excelApplication;
+
+        private Store lastLoadedStore;
 
         public FiscalDataController()
         {
             fiscalPrinters = new Dictionary<string, FiscalPrinter>();
             companyByShortName = new Dictionary<string, Company>();
+            excelApplication = new Excel.Application();
+            lastLoadedStore = null;
         }
         /// <summary>
         /// Загружает данные о фискальных принтерах из CSV-файла заданного формата.
@@ -34,23 +39,31 @@ namespace MCDFiscalManager.DataController
         /// <returns>Число успешно загруженных записей.</returns>
         public int LoadPrinterDataFormFile(FileInfo dataFile)
         {
-            if (dataFile.Extension != ".csv")
-                throw new FileLoadException("Файл загрузки данных должен быть CSV-файлом", nameof(dataFile));
             int count = 0;
-            using (StreamReader reader = new StreamReader(dataFile.FullName))
+            if ((dataFile.Extension != ".xlsx") || (dataFile.Extension != ".xls"))
             {
-                FiscalPrinter tempPrinter = null;
-                reader.ReadLine();
-                while(reader.Peek() > -1)
+                using (StreamReader reader = new StreamReader(dataFile.FullName))
                 {
-                    tempPrinter = stringDataAnalyzer(reader.ReadLine());
-                    if (tempPrinter != null)
+                    Excel.Workbook workbook = excelApplication.Workbooks.Open(dataFile.FullName);
+                    Excel.Worksheet sheet = workbook.Sheets[1];
+                    int i = 2;
+                    while (!string.IsNullOrEmpty(sheet.Cells[i, 1].Value.ToString()))
                     {
-                        fiscalPrinters.Add(tempPrinter.SerialNumber, tempPrinter);
-                        count++;
+                        FiscalPrinter tempPrinter = stringDataAnalyzer(sheet.Rows[i]);
+                        if (tempPrinter != null)
+                        {
+                            fiscalPrinters.Add(tempPrinter.SerialNumber, tempPrinter);
+                            count++;
+                        }
+                        i++;
                     }
                 }
             }
+            else
+            {
+                throw new FileLoadException("Файл загрузки данных должен быть Excel-файлом", nameof(dataFile));
+            }
+
             return count;
         }
         /// <summary>
@@ -59,28 +72,43 @@ namespace MCDFiscalManager.DataController
         /// </summary>
         /// <param name="line">Входная строка, содержащая данные для создания объекта FiscalPrinter.</param>
         /// <returns>Объект FiscalPrinter построенный на основе входых данных.</returns>
-        private FiscalPrinter stringDataAnalyzer(string line)
+        private FiscalPrinter stringDataAnalyzer(Excel.Range range)
         {
-            string[] data = line.Split(new char[] {',',';'});
-            Store storePlace = this.StoreDataFromFile(new FileInfo(Environment.CurrentDirectory + @"\data\storedata.xlsx"), data[0]);
-            
-            FiscalMemory fiscalMemory = new FiscalMemory(serialNumber: data[3], 
-                                                            model: data[4], null, null);
-            
-            Adress adress = new Adress(postcode: data[5], 
-                                        codeOfRegion: data[6], 
-                                        street: data[7], 
-                                        house:data[8],
-                                        building: data[9]);
-            
-            FiscalPrinter fiscalPrinter = new FiscalPrinter(serialNumber: data[1],
-                                                            model: data[2],
+            string storeNumber = range.Cells[1, 1].Value.ToString();
+            Store storePlace;
+            if ((lastLoadedStore != null) && (lastLoadedStore.Number == storeNumber)) storePlace = lastLoadedStore;
+            else storePlace = this.StoreDataFromFile(new FileInfo(Environment.CurrentDirectory + @"\data\storedata.xlsx"), storeNumber);
+
+            string serialNumberFM = range.Cells[1, 4].Value.ToString();
+            string modelFM = range.Cells[1, 5].Value.ToString();
+            FiscalMemory fiscalMemory = new FiscalMemory(serialNumber: serialNumberFM,
+                                                            model: modelFM, null, null);
+
+            string postcodeA = range.Cells[1, 6].Value.ToString();
+            string codeOfRegionA = range.Cells[1, 7].Value.ToString();
+            string city = range.Cells[1, 8].Value.ToString();
+            string streetA = range.Cells[1, 9].Value.ToString();
+            string houseA = range.Cells[1, 10].Value.ToString();
+            string buildingA = "";
+            if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString();
+            Adress adress = new Adress(postcode: postcodeA,
+                                        codeOfRegion: codeOfRegionA,
+                                        city: city,
+                                        street: streetA,
+                                        house: houseA,
+                                        building: buildingA);
+
+            string serialNumberFP = range.Cells[1, 2].Value.ToString();
+            string modelFP = range.Cells[1, 3].Value.ToString();
+            FiscalPrinter fiscalPrinter = new FiscalPrinter(serialNumber: serialNumberFP,
+                                                            model: modelFP,
                                                             placeOfInstallation: storePlace,
                                                             registrationDate: null,
-                                                            registrationNumber:"", 
-                                                            fiscalMemory: fiscalMemory, 
-                                                            adress: adress); ; ;
-            
+                                                            registrationNumber: "",
+                                                            fiscalMemory: fiscalMemory,
+                                                            adress: adress);
+
+            lastLoadedStore = storePlace;
             return fiscalPrinter;
         }
         /// <summary>
@@ -91,18 +119,17 @@ namespace MCDFiscalManager.DataController
         {
             if (!root.Exists) root.Create();
             FileInfo file = new FileInfo(Path.Combine(root.FullName, "TemplateRegistrationFile.csv"));
-            
-            using (StreamWriter writer = new StreamWriter(file.Create(),Encoding.UTF8))
-            { 
+
+            using (StreamWriter writer = new StreamWriter(file.Create(), Encoding.UTF8))
+            {
                 writer.WriteLine(@"Номер ПБО; Серийный номер ККТ; Модель ККТ; Серийный номер ФН; Модель ФН; Почтовый индекс; Код региона; Улица; Дом; Корпус/Литер/Иной признак строения;");
             }
-            
+
         }
 
         public Store StoreDataFromFile(FileInfo fileInfo, string storeNumber)
         {
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook workbook = excelApp.Workbooks.Open(fileInfo.FullName);
+            Excel.Workbook workbook = excelApplication.Workbooks.Open(fileInfo.FullName);
             Excel.Worksheet worksheet = workbook.Sheets[1];
             try
             {
@@ -125,15 +152,13 @@ namespace MCDFiscalManager.DataController
             catch (Exception ex)
             {
 
-                throw new Exception("Возникла ошибка при поиске данных о ПБО",ex);
+                throw new Exception("Возникла ошибка при поиске данных о ПБО", ex);
             }
             finally
             {
                 workbook.Close(false);
-                excelApp.Quit();
                 worksheet = null;
                 workbook = null;
-                excelApp = null;
                 GC.Collect();
             }
             return null;
@@ -141,7 +166,7 @@ namespace MCDFiscalManager.DataController
 
         public bool LoadUserDataFromTextFile(FileInfo file)
         {
-            using(StreamReader reader = new StreamReader(file.FullName))
+            using (StreamReader reader = new StreamReader(file.FullName))
             {
                 string[] lines = reader.ReadLine().Split(',');
                 User result = new User(lines[1], lines[0], lines[2]);
@@ -192,7 +217,7 @@ namespace MCDFiscalManager.DataController
             catch (Exception throwedException)
             {
 
-                throw new SerializationException("Возникла ошибка сохранении справочника компаний.",throwedException);
+                throw new SerializationException("Возникла ошибка сохранении справочника компаний.", throwedException);
             }
         }
 
@@ -205,11 +230,11 @@ namespace MCDFiscalManager.DataController
             companyByShortName.Remove(shortName);
         }
 
-        public void CreateXMLFiles()
+        public void CreateXMLFiles(DirectoryInfo outputDir)
         {
-            foreach(KeyValuePair<string,FiscalPrinter> temp in fiscalPrinters)
+            foreach (KeyValuePair<string, FiscalPrinter> temp in fiscalPrinters)
             {
-                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd);
+                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir);
             }
         }
     }

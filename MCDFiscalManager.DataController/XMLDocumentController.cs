@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using MCDFiscalManager.BusinessModel.Model;
-
+using System.IO;
 namespace MCDFiscalManager.DataController
 {
     public class XMLDocumentController
     {
-        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter, User user, OFD ofd)
+        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter, User user, OFD ofd, DirectoryInfo outputDir)
         {
             XDocument doc = new XDocument();
 
@@ -93,15 +93,17 @@ namespace MCDFiscalManager.DataController
             XElement adressKKT = new XElement("АдрМУстККТ");
             XAttribute postCode = new XAttribute("Индекс", fiscalPrinter.Adress.Postcode);
             XAttribute regionCode = new XAttribute("КодРегион", fiscalPrinter.Adress.CodeOfRegion);
+            XAttribute city = new XAttribute("Город", fiscalPrinter.Adress.City);
             XAttribute street = new XAttribute("Улица", fiscalPrinter.Adress.Street);
             XAttribute house = new XAttribute("Дом", fiscalPrinter.Adress.House);
             XAttribute building = new XAttribute("Корпус", fiscalPrinter.Adress.Building);
 
-            adressKKT.Add(postCode, regionCode, street, house, building);
+            adressKKT.Add(postCode, regionCode, city, street, house);
+            if (!string.IsNullOrWhiteSpace(building.Value)) adressKKT.Add(building);
             installAdress.Add(adressKKT);
 
             doc.Add(file);
-            doc.Save($"{fiscalPrinter.SerialNumber}.xml");
+            doc.Save(Path.Combine(outputDir.FullName, $"{fiscalPrinter.SerialNumber}.xml"));
             return true;
         }
     }
