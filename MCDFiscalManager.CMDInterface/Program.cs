@@ -6,23 +6,28 @@ using System.Text;
 using System.IO;
 using MCDFiscalManager.BusinessModel.Model;
 using System.Globalization;
+using System.Configuration;
 namespace MCDFiscalManager.CMDInterface
 {
     class Program
     {
+        private static FileInfo storeDataFile;
+        private static FileInfo ofdDataFile;
+        private static FileInfo usersDataFile;
+        private static DirectoryInfo outputDirectory;
+        private static DirectoryInfo inputDirectory;
         static void Main(string[] args)
         {
-            var culture = CultureInfo.GetCultureInfo("ru-RU");
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            Initialize();
+
 
             FiscalDataController mainData = new FiscalDataController();
             mainData.LoadCompanyListFromFile(new FileInfo(Environment.CurrentDirectory + @"\bin\company.bin"));
-            mainData.LoadUserDataFromTextFile(new FileInfo(Environment.CurrentDirectory + @"\data\user.txt"));
-            mainData.LoadOFDDataFromTextFile(new FileInfo(Environment.CurrentDirectory + @"\data\ofd.txt"));
-            FiscalDataController.CreateTemplateRegistrationFile(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"output")));
+            mainData.LoadUserDataFromTextFile(usersDataFile);
+            mainData.LoadOFDDataFromTextFile(ofdDataFile);
+            FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
 
-            FileInfo[] files = (new DirectoryInfo(Environment.CurrentDirectory + @"\input")).GetFiles();
+            FileInfo[] files = inputDirectory.GetFiles();
             foreach (FileInfo file in files)
             {
                 if ((file.Extension == ".xlsx") || (file.Extension == ".xls"))
@@ -48,8 +53,55 @@ namespace MCDFiscalManager.CMDInterface
                 }
 
             }
-            Console.WriteLine("ok");
+            Console.WriteLine("Program is end working. Press Enter for exit...");
             Console.ReadLine();
+        }
+
+        public static void Initialize()
+        {
+            #region Initialization of application file variables from the configuration file
+            try
+            {
+                AppSettingsReader appSettingsReader = new AppSettingsReader();
+                DataFileInitialization(appSettingsReader, "StoreDataFilePath", out storeDataFile);
+                DataFileInitialization(appSettingsReader, "OFDDataFilePath", out ofdDataFile);
+                DataFileInitialization(appSettingsReader, "UsersDataFilePath", out usersDataFile);
+                DirectoryInitialization(appSettingsReader, "InputDirectory", out inputDirectory);
+                DirectoryInitialization(appSettingsReader, "OutputDirectory", out outputDirectory);
+
+            }
+            catch (FileNotFoundException fileNotEx)
+            {
+                throw new FileNotFoundException($"Возникла ошибка доступа/наличия файлов инициализации.\nОригинальное сообщение: {fileNotEx}", fileNotEx);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Возникла ошибка инициализации приложения.\nОригинальное сообщение:{ex}", ex);
+            }
+            #endregion
+            #region CultureInstalling
+            var culture = CultureInfo.GetCultureInfo("ru-RU");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            #endregion
+        }
+
+        private static void DataFileInitialization(AppSettingsReader appSettingsReader, string configFileValue, out FileInfo file)
+        {
+            string configDataFilePath = (string)appSettingsReader.GetValue(configFileValue, typeof(string));
+            if (Path.IsPathRooted(configDataFilePath))
+                file = new FileInfo(configDataFilePath);
+            else file = new FileInfo(Path.Combine(Environment.CurrentDirectory, configDataFilePath));
+            if (!file.Exists) throw new FileNotFoundException($"Не удалось найти файл с данными: {file.FullName}", nameof(configDataFilePath));
+        }
+        
+        private static void DirectoryInitialization(AppSettingsReader appSettingsReader, string configParametr, out DirectoryInfo directory)
+        {
+            string directoryPath = (string)appSettingsReader.GetValue(configParametr, typeof(string));
+            if (Path.IsPathRooted(directoryPath))
+                directory = new DirectoryInfo(directoryPath);
+            else directory = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, directoryPath));
+            if (!directory.Exists) directory.Create();
         }
     }
 }

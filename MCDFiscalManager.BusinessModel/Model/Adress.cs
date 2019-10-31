@@ -13,27 +13,27 @@ namespace MCDFiscalManager.BusinessModel.Model
     {
         #region Properties
         /// <summary>
-        /// Почтовый индекс.
+        /// Задает или возвращает почтовый индекс.
         /// </summary>
         public string Postcode { get; set; }
         /// <summary>
-        /// Код региона.
+        /// Задает или возвращает код региона.
         /// </summary>
         public string CodeOfRegion { get; set; }
         /// <summary>
-        /// 
+        /// Задает или возвращает город объекта.
         /// </summary>
         public string City { get; set; }
         /// <summary>
-        /// Улица
+        /// Задает или возвращает улицу объекта.
         /// </summary>
         public string Street { get; set; }
         /// <summary>
-        /// Номер дома
+        /// Задает или возвращает номер дома объекта.
         /// </summary>
         public string House { get; set; }
         /// <summary>
-        /// Номер корпуса, строение, литера.
+        /// Задает или возвращает номер корпуса, строения, литерау
         /// </summary>
         public string Building { get; set; }
         #endregion

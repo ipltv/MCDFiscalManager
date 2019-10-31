@@ -47,7 +47,7 @@ namespace MCDFiscalManager.DataController
                     Excel.Workbook workbook = excelApplication.Workbooks.Open(dataFile.FullName);
                     Excel.Worksheet sheet = workbook.Sheets[1];
                     int i = 2;
-                    while (!string.IsNullOrEmpty(sheet.Cells[i, 1].Value.ToString()))
+                    while (!string.IsNullOrEmpty(sheet.Cells[i, 1].Text))
                     {
                         FiscalPrinter tempPrinter = stringDataAnalyzer(sheet.Rows[i]);
                         if (tempPrinter != null)

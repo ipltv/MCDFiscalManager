@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
 [assembly: AssemblyTitle("MCDFiscalManager.CMDInterface")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Сборка консольного интерфейса для программы генерации XML-заявления в ЛК ФНС ЮЛ.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("McDonalds Russia")]
 [assembly: AssemblyProduct("MCDFiscalManager.CMDInterface")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright © Ilya Platovich  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
