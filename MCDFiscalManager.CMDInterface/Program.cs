@@ -21,7 +21,7 @@ namespace MCDFiscalManager.CMDInterface
             Initialize();
 
 
-            FiscalDataController mainData = new FiscalDataController();
+            FiscalDataController mainData = new FiscalDataController(storeDataFile);
             mainData.LoadCompanyListFromFile(new FileInfo(Environment.CurrentDirectory + @"\bin\company.bin"));
             mainData.LoadUserDataFromTextFile(usersDataFile);
             mainData.LoadOFDDataFromTextFile(ofdDataFile);

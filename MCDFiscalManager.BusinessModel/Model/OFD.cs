@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MCDFiscalManager.BusinessModel.Model
 {
+    [Serializable]
     public class OFD
     {
         /// <summary>

@@ -16,7 +16,7 @@ namespace MCDFiscalManager.DataController
         /// <param name="file">Объект FileInfo представляющий файл, в который должна быть помещена информация.</param>
         public static void CreateMcDonaldsCompanyFile(FileInfo file)
         {
-            FiscalDataController fiscalDataController = new FiscalDataController();
+            FiscalDataController fiscalDataController = new FiscalDataController(new FileInfo(""));
             Company mcdonaldsCJCS = new Company("ЗАКРЫТОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО \"МОСКВА - МАКДОНАЛДС\"", "ЗАО \"МОСКВА - МАКДОНАЛДС\"", "7710044132", "ЗАО");
             Company mcdonaldsLLC = new Company("ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"МАКДОНАЛДС\"","ООО \"МАКДОНАЛДС\"", "7710044140","ООО");
             Company nroLLC = new Company("ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"СРП\"", "ООО \"СРП\"", "7802668116", "ООО");

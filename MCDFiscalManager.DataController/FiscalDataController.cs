@@ -14,16 +14,27 @@ namespace MCDFiscalManager.DataController
 {
     public class FiscalDataController
     {
+        private UserDataController userDataController;
+        private AuxiliaryDataController<Company> companyDataController;
+        private AuxiliaryDataController<OFD> ofdDataController;
+
+
         private Dictionary<string, FiscalPrinter> fiscalPrinters;
         private Dictionary<string, Company> companyByShortName;
         private User user;
         private OFD ofd;
         private Excel.Application excelApplication;
+        private FileInfo storeDataFile;
 
         private Store lastLoadedStore;
 
-        public FiscalDataController()
+        /// <summary>
+        /// Создает новый объект класса FiscalDataController представляющий методы для обработки данных о фискальных регистраторах.
+        /// </summary>
+        /// <param name="storeData">Объект FileInfo содржащий файл с данными о ПБО.</param>
+        public FiscalDataController(FileInfo storeData)
         {
+            storeDataFile = storeData;
             fiscalPrinters = new Dictionary<string, FiscalPrinter>();
             companyByShortName = new Dictionary<string, Company>();
             excelApplication = new Excel.Application();
@@ -67,39 +78,48 @@ namespace MCDFiscalManager.DataController
             return count;
         }
         /// <summary>
-        /// Конструирует объект FiscalPrinter на основе данных из входной строки.
-        /// Строка должна строго соответсвовать установленному шаблону.
+        /// Конструирует объект FiscalPrinter на основе данных из входного объекта Range.
+        /// Объект Range должен строго соответсвовать установленному шаблону.
         /// </summary>
-        /// <param name="line">Входная строка, содержащая данные для создания объекта FiscalPrinter.</param>
+        /// <param name="range">Объект Excel.Range, содержащий строку с данными для создания объекта FiscalPrinter.</param>
         /// <returns>Объект FiscalPrinter построенный на основе входых данных.</returns>
         private FiscalPrinter stringDataAnalyzer(Excel.Range range)
         {
+            //Определени номера ПБО.
+            //Поиск данных о ПБО, номер которого содаржится в первой ячейке переданного диапазона.
+            //Если данные о ПБО с этим номером были загружены при предыдущем вызовы метода StoreDataFromFile поиск не осуществляется.
             string storeNumber = range.Cells[1, 1].Value.ToString();
             Store storePlace;
-            if ((lastLoadedStore != null) && (lastLoadedStore.Number == storeNumber)) storePlace = lastLoadedStore;
-            else storePlace = this.StoreDataFromFile(new FileInfo(Environment.CurrentDirectory + @"\data\storedata.xlsx"), storeNumber);
-
-            string serialNumberFM = range.Cells[1, 4].Value.ToString();
-            string modelFM = range.Cells[1, 5].Value.ToString();
+            if ((lastLoadedStore != null) && (lastLoadedStore.Number == storeNumber))
+            { storePlace = lastLoadedStore; }
+            else
+            {
+                storePlace = this.StoreDataFromFile(storeDataFile, storeNumber);
+                lastLoadedStore = storePlace;
+            }
+            //Чтение данных о фискальном накопителе из ячеек переданного Range
+            string serialNumberFM = range.Cells[1, 4].Value.ToString(); //Серийный номер фискального накопителя из 4ой ячейки.  
+            string modelFM = range.Cells[1, 5].Value.ToString(); //Модель ФН из 5ой ячейки
             FiscalMemory fiscalMemory = new FiscalMemory(serialNumber: serialNumberFM,
                                                             model: modelFM, null, null);
 
-            string postcodeA = range.Cells[1, 6].Value.ToString();
-            string codeOfRegionA = range.Cells[1, 7].Value.ToString();
-            string city = range.Cells[1, 8].Value.ToString();
-            string streetA = range.Cells[1, 9].Value.ToString();
-            string houseA = range.Cells[1, 10].Value.ToString();
+            //Чтение данных о адресе из ячеек переданного Range
+            string postcodeA = range.Cells[1, 6].Value.ToString(); //Индекс из ячийки 6
+            string codeOfRegionA = range.Cells[1, 7].Value.ToString(); //Код региона из ячейки 7
+            string city = range.Cells[1, 8].Value.ToString(); //Город из ячейки 8
+            string streetA = range.Cells[1, 9].Value.ToString(); // Улица из ячейки 9
+            string houseA = range.Cells[1, 10].Value.ToString(); // Номер дома из ячейки 10
             string buildingA = "";
-            if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString();
+            if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString(); // Признак строения (корпус, литера и пр.) из ячейки 11, если она не пустая.
             Adress adress = new Adress(postcode: postcodeA,
                                         codeOfRegion: codeOfRegionA,
                                         city: city,
                                         street: streetA,
                                         house: houseA,
                                         building: buildingA);
-
-            string serialNumberFP = range.Cells[1, 2].Value.ToString();
-            string modelFP = range.Cells[1, 3].Value.ToString();
+            //Чтение данных о фискальном регистраторе и создание результирующего объекта с использованием ранее созданных FiscalMemory и Adress.
+            string serialNumberFP = range.Cells[1, 2].Value.ToString(); //Серийный номер фискального принтера из ячейки 2
+            string modelFP = range.Cells[1, 3].Value.ToString(); //Модель ФП из ячейки 3
             FiscalPrinter fiscalPrinter = new FiscalPrinter(serialNumber: serialNumberFP,
                                                             model: modelFP,
                                                             placeOfInstallation: storePlace,
@@ -107,8 +127,6 @@ namespace MCDFiscalManager.DataController
                                                             registrationNumber: "",
                                                             fiscalMemory: fiscalMemory,
                                                             adress: adress);
-
-            lastLoadedStore = storePlace;
             return fiscalPrinter;
         }
         /// <summary>
@@ -126,7 +144,6 @@ namespace MCDFiscalManager.DataController
             }
 
         }
-
         public Store StoreDataFromFile(FileInfo fileInfo, string storeNumber)
         {
             Excel.Workbook workbook = excelApplication.Workbooks.Open(fileInfo.FullName);
@@ -163,7 +180,6 @@ namespace MCDFiscalManager.DataController
             }
             return null;
         }
-
         public bool LoadUserDataFromTextFile(FileInfo file)
         {
             using (StreamReader reader = new StreamReader(file.FullName))
@@ -174,7 +190,6 @@ namespace MCDFiscalManager.DataController
                 return true;
             }
         }
-
         public bool LoadOFDDataFromTextFile(FileInfo file)
         {
             using (StreamReader reader = new StreamReader(file.FullName))
@@ -204,7 +219,6 @@ namespace MCDFiscalManager.DataController
                 throw new SerializationException("Возникла ошибка при загрузке справочника компаний. Данные не будут загружены.", throwedException);
             }
         }
-
         public void SaveCompanyListToFile(FileInfo file)
         {
             try
@@ -220,7 +234,6 @@ namespace MCDFiscalManager.DataController
                 throw new SerializationException("Возникла ошибка сохранении справочника компаний.", throwedException);
             }
         }
-
         public void AddCompany(Company addItem)
         {
             companyByShortName.Add(addItem.ShortName, addItem);
@@ -229,7 +242,6 @@ namespace MCDFiscalManager.DataController
         {
             companyByShortName.Remove(shortName);
         }
-
         public void CreateXMLFiles(DirectoryInfo outputDir)
         {
             foreach (KeyValuePair<string, FiscalPrinter> temp in fiscalPrinters)

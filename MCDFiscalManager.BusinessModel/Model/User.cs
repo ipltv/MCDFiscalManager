@@ -9,6 +9,7 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// <summary>
     /// Класс представляющий данные о пользователе.
     /// </summary>
+    [Serializable]
     public class User
     {
         #region Properties
