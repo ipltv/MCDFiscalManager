@@ -26,7 +26,7 @@ namespace MCDFiscalManager.DataController
         }
         public override bool SetCurrentElement(string surname)
         {
-            User userBySurname = base.elements.Values.FirstOrDefault(p => p.Surname == surname);
+            User userBySurname = elements.Values.FirstOrDefault(p => p.Surname == surname);
             if (userBySurname != null)
             {
                 curentElement = userBySurname;
@@ -43,7 +43,13 @@ namespace MCDFiscalManager.DataController
         }
         public override void RemoveElement(User element)
         {
+            User deletedUser = elements[element.Surname];
             elements.Remove(element.Surname);
+
+            if (curentElement == deletedUser)
+            {
+                curentElement = elements.Values.FirstOrDefault(p => p != null);
+            }
         }
     }
 }

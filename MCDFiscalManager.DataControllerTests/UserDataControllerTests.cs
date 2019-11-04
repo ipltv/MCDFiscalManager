@@ -91,13 +91,27 @@ namespace MCDFiscalManager.DataController.Tests
         [TestMethod()]
         public void AddElementTest()
         {
-            Assert.Fail();
+            User user = new User("Ivan", "Ivanov", "Ivanovich");
+            UserDataController userDataController = new UserDataController(user);
+
+            User user1 = new User("Semen", "Semenov", "Semenovich");
+            userDataController.AddElement(user1);
+            userDataController.SetCurrentElement("Semenov");
+            Assert.AreEqual(user1, userDataController.GetCurrentElement());
         }
 
         [TestMethod()]
         public void RemoveElementTest()
         {
-            Assert.Fail();
+            User user = new User("Ivan", "Ivanov", "Ivanovich");
+            UserDataController userDataController = new UserDataController(user);
+
+            User user1 = new User("Semen", "Semenov", "Semenovich");
+            userDataController.AddElement(user1);
+            userDataController.SetCurrentElement("Semenov");
+            Assert.AreEqual(user1, userDataController.GetCurrentElement());
+            userDataController.RemoveElement(user1);
+            Assert.AreEqual(user, userDataController.GetCurrentElement());
         }
     }
 }

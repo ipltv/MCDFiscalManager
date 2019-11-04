@@ -35,12 +35,12 @@ namespace MCDFiscalManager.DataController
 
         public override void AddElement(Company element)
         {
-            throw new NotImplementedException();
+            elements.Add(element.TIN, element);
         }
 
         public override void RemoveElement(Company element)
         {
-            throw new NotImplementedException();
+            elements.Remove(element.TIN);
         }
     }
 }
