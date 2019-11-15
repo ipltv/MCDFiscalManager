@@ -112,5 +112,10 @@ namespace MCDFiscalManager.DataController
         /// </summary>
         /// <param name="element">Удаляемый элемент.</param>
         public abstract void RemoveElement(T element);
+
+        public int Count
+        {
+            get { return elements.Count; }
+        }
     }
 }

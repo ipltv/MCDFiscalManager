@@ -40,7 +40,13 @@ namespace MCDFiscalManager.DataController
 
         public override void RemoveElement(Company element)
         {
+            Company deletedCompany = elements[element.TIN];
             elements.Remove(element.TIN);
+
+            if (curentElement == deletedCompany)
+            {
+                curentElement = elements.Values.FirstOrDefault(p => p != null);
+            }
         }
     }
 }

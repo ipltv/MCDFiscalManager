@@ -48,6 +48,7 @@
     <Compile Include="FiscalDataController.cs" />
     <Compile Include="IFileData.cs" />
     <Compile Include="McDonaldsRussiaDataCreator.cs" />
+    <Compile Include="OFDDataController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AuxiliaryDataController.cs" />
     <Compile Include="UserDataController.cs" />

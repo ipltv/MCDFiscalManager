@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using MCDFiscalManager.BusinessModel.Model;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization.Formatters.Soap;
 using System.IO;
 using System.Threading;
 
@@ -84,7 +83,7 @@ namespace MCDFiscalManager.DataController.Tests
         {
             User user = new User("Ivan", "Ivanov", "Ivanovich");
             UserDataController userDataController = new UserDataController(user);
-            userDataController.SetCurrentElement(user.Surname);
+            Assert.IsTrue(userDataController.SetCurrentElement(user.Surname));
             Assert.AreEqual(user, userDataController.GetCurrentElement());
         }
 
