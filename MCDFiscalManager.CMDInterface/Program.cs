@@ -85,7 +85,13 @@ namespace MCDFiscalManager.CMDInterface
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             #endregion
         }
-
+        /// <summary>
+        /// Проверяет наличие рабочих файлов приложения указанных в App.config.
+        /// В случае отсутствия файлов создается исключение FileNotFoundException. 
+        /// </summary>
+        /// <param name="appSettingsReader">Объект AppSettingsReader для чтения данных из App.config</param>
+        /// <param name="configFileValue">Параматер в файле App.config</param>
+        /// <param name="file">Объект FileInfo представляющий рабочий файл приложения.</param>
         private static void DataFileInitialization(AppSettingsReader appSettingsReader, string configFileValue, out FileInfo file)
         {
             string configDataFilePath = (string)appSettingsReader.GetValue(configFileValue, typeof(string));
@@ -94,7 +100,13 @@ namespace MCDFiscalManager.CMDInterface
             else file = new FileInfo(Path.Combine(Environment.CurrentDirectory, configDataFilePath));
             if (!file.Exists) throw new FileNotFoundException($"Не удалось найти файл с данными: {file.FullName}", nameof(configDataFilePath));
         }
-        
+        /// <summary>
+        /// Проверяет наличие рабочих директорий приложения указанных в App.config.
+        /// В случае отсутствия директории создает ее. 
+        /// </summary>
+        /// <param name="appSettingsReader">Объект AppSettingsReader для чтения данных из App.config</param>
+        /// <param name="configParametr">Параматер в файле App.config</param>
+        /// <param name="directory">Объект DirectoryInfo представляющий рабочую директорю приложения.</param>
         private static void DirectoryInitialization(AppSettingsReader appSettingsReader, string configParametr, out DirectoryInfo directory)
         {
             string directoryPath = (string)appSettingsReader.GetValue(configParametr, typeof(string));

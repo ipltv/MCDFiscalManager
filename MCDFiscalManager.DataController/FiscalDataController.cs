@@ -41,6 +41,24 @@ namespace MCDFiscalManager.DataController
             lastLoadedStore = null;
         }
         /// <summary>
+        /// Создает новый объект класса FiscalDataController представляющий методы для обработки данных о фискальных регистраторах.
+        /// </summary>
+        /// <param name="storeData">Объект FileInfo содржащий файл с данными о ПБО.</param>
+        /// <param name="userData">Контроллер данных пользователей.</param>
+        /// <param name="companyData">Контроллер данных о компаниях.</param>
+        /// <param name="ofdData">Контроллер данных ОФД.</param>
+        public FiscalDataController
+            (FileInfo storeData, 
+             UserDataController userData, 
+             CompanyDataController companyData, 
+             OFDDataController ofdData) : this(storeData)
+        {
+            storeDataFile = storeData;
+            userDataController = userData;
+            companyDataController = companyData;
+            ofdDataController = ofdData;
+        }
+        /// <summary>
         /// Загружает данные о фискальных принтерах из CSV-файла заданного формата.
         /// Строки не соответствующего формата игнорируются.
         /// Первая строка (заголовок) игнорируется.
