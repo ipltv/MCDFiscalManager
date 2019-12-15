@@ -14,6 +14,10 @@ namespace MCDFiscalManager.BusinessModel.Model
     {
         #region Properties
         /// <summary>
+        /// Id пользователя для EF.
+        /// </summary>
+        public int UserId { get; set; }
+        /// <summary>
         /// Имя пользователя.
         /// </summary>
         public string Name { get; set; }

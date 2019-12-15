@@ -21,6 +21,10 @@ namespace MCDFiscalManager.BusinessModel.Model
         #endregion
         #region Properties
         /// <summary>
+        /// Id фискального принтера для EF.
+        /// </summary>
+        public int FiscalPrinterId { get; set; }
+        /// <summary>
         /// Серийный номер фискального принтера. Только для чтения.
         /// </summary>
         public string SerialNumber

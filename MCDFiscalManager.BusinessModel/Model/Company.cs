@@ -11,9 +11,25 @@ namespace MCDFiscalManager.BusinessModel.Model
     public class Company
     {
         #region Properties
+        /// <summary>
+        /// ID компании для EF.
+        /// </summary>
+        public int CompanyId { get; set; }
+        /// <summary>
+        /// Полное наименование компании.
+        /// </summary>
         public string FullName { get; set; }
+        /// <summary>
+        /// Короткое название компании.
+        /// </summary>
         public string ShortName { get; set; }
+        /// <summary>
+        /// Организационно-правовая форма компании.
+        /// </summary>
         public string LegalForm { get; set; }
+        /// <summary>
+        /// ИНН компании.
+        /// </summary>
         public string TIN { get; set; }
         #endregion
         #region Constructions
