@@ -10,6 +10,10 @@ namespace MCDFiscalManager.BusinessModel.Model
     public class OFD
     {
         /// <summary>
+        /// Id ОФД для EF.
+        /// </summary>
+        public int OFDId { get; set; }
+        /// <summary>
         /// ИНН ОФД.
         /// </summary>
         public string TIN { get; set; }

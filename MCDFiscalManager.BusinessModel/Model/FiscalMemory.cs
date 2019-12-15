@@ -13,6 +13,10 @@ namespace MCDFiscalManager.BusinessModel.Model
     {
         #region Properties
         /// <summary>
+        /// Id фискальной памяти для EF.
+        /// </summary>
+        public int FiscalMemoryId { get; set; }
+        /// <summary>
         /// Серийный номер фискального накопителя. Только для чтения.
         /// </summary>
         public string SerialNumber { get; }

@@ -11,6 +11,10 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// </summary>
     public class Adress
     {
+        /// <summary>
+        /// ID записи адреса для EF.
+        /// </summary>
+        public int AdressID { get; set; }
         #region Properties
         /// <summary>
         /// Задает или возвращает почтовый индекс.

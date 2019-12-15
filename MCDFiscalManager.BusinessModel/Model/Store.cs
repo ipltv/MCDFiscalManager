@@ -10,10 +10,29 @@ namespace MCDFiscalManager.BusinessModel.Model
     public class Store
     {
         #region Properties
+        /// <summary>
+        /// Id ПБО для EF.
+        /// </summary>
+        public int StoreId { get; set; }
+        /// <summary>
+        /// Номер ПБО.
+        /// </summary>
         public string Number { get; set; }
+        /// <summary>
+        /// Название ПБО.
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Управляющая компания ПБО.
+        /// </summary>
         public Company Owner { get; set; }
+        /// <summary>
+        /// КПП обособленного подразделения.
+        /// </summary>
         public string TRRC { get; set; }
+        /// <summary>
+        /// Код регистрирующего налогового органа.
+        /// </summary>
         public string TaxAuthoritiesCode { get; set; }
         #endregion
         #region Constructions
