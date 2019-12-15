@@ -57,9 +57,10 @@
     <Compile Include="CompanyDataController.cs" />
     <Compile Include="FiscalContext.cs" />
     <Compile Include="FiscalDataController.cs" />
-    <Compile Include="Interfaces\IFileData.cs" />
-    <Compile Include="Interfaces\IDataSaver.cs" />
+    <Compile Include="IFileData.cs" />
+    <Compile Include="IDataSaver.cs" />
     <Compile Include="McDonaldsRussiaDataCreator.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OFDDataController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AuxiliaryDataController.cs" />

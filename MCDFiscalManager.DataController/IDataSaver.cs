@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCDFiscalManager.DataController.Interfaces
+namespace MCDFiscalManager.DataController
 {
     public interface IDataSaver
     {
