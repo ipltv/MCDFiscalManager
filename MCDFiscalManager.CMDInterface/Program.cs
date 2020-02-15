@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using MCDFiscalManager.BusinessModel.Model;
+using MCDFiscalManager.DataController.Savers;
 using System.Globalization;
 using System.Configuration;
 namespace MCDFiscalManager.CMDInterface
@@ -18,42 +19,55 @@ namespace MCDFiscalManager.CMDInterface
         private static DirectoryInfo inputDirectory;
         static void Main(string[] args)
         {
-            Initialize();
+            #region OldLogic
+            //Initialize();
 
+            //UserDataController userDataController;
+            //CompanyDataController companyDataController;
+            //OFDDataController ofdDataController;
 
-            FiscalDataController mainData = new FiscalDataController(storeDataFile);
-            mainData.LoadCompanyListFromFile(new FileInfo(Environment.CurrentDirectory + @"\bin\company.bin"));
-            mainData.LoadUserDataFromTextFile(usersDataFile);
-            mainData.LoadOFDDataFromTextFile(ofdDataFile);
-            FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
+            //FiscalDataController mainData = new FiscalDataController(storeDataFile);
+            //mainData.LoadCompanyListFromFile(new FileInfo(Environment.CurrentDirectory + @"\bin\company.bin"));
+            //mainData.LoadUserDataFromTextFile(usersDataFile);
+            //mainData.LoadOFDDataFromTextFile(ofdDataFile);
+            //FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
 
-            FileInfo[] files = inputDirectory.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                if ((file.Extension == ".xlsx") || (file.Extension == ".xls"))
-                {
-                    try
-                    {
-                        mainData.LoadPrinterDataFormFile(file);
-                        mainData.CreateXMLFiles(new DirectoryInfo(Environment.CurrentDirectory + @"\output"));
-                    }
-                    catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException ex)
-                    {
-                        Console.WriteLine("Не удалось до конца прочитать файл. Данные будут сформированы для успешно считаных ФН.");
-                        mainData.CreateXMLFiles(new DirectoryInfo(Environment.CurrentDirectory + @"\output"));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Произошла ошибка при обработке файла {file.Name}.\nОригинальное сообщение:\n{ex}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Файл {file.Name} не будет обработан, так как его расширение не поддерживается");
-                }
+            //FileInfo[] files = inputDirectory.GetFiles();
+            //foreach (FileInfo file in files)
+            //{
+            //    if ((file.Extension == ".xlsx") || (file.Extension == ".xls"))
+            //    {
+            //        try
+            //        {
+            //            mainData.LoadPrinterDataFormFile(file);
+            //            mainData.CreateXMLFiles(new DirectoryInfo(Environment.CurrentDirectory + @"\output"));
+            //        }
+            //        catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException ex)
+            //        {
+            //            Console.WriteLine("Не удалось до конца прочитать файл. Данные будут сформированы для успешно считаных ФН.");
+            //            mainData.CreateXMLFiles(new DirectoryInfo(Environment.CurrentDirectory + @"\output"));
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine($"Произошла ошибка при обработке файла {file.Name}.\nОригинальное сообщение:\n{ex}");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine($"Файл {file.Name} не будет обработан, так как его расширение не поддерживается");
+            //    }
 
-            }
-            Console.WriteLine("Program is end working. Press Enter for exit...");
+            //}
+            //Console.WriteLine("Program is end working. Press Enter for exit...");
+            #endregion
+            ExcelDataSaver excelDataSaver = new ExcelDataSaver();
+            List<User> users = new List<User>();
+            users.Add(new User("Ирина", "Фоменкова", "Анатольевна"));
+            users.Add(new User("Илья", "Платович", "Ильич"));
+            users.Add(new User("Андрей", "Титков", "Владимирович"));
+            excelDataSaver.Save<User>(users);
+            excelDataSaver.Dispose();
+            GC.Collect();
             Console.ReadLine();
         }
 

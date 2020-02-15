@@ -21,32 +21,32 @@
       <FileName>Model\FiscalMemory.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MCDFiscalManager.BusinessModel.Model.FiscalPrinter" Collapsed="true">
-    <Position X="0.5" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAACIAEAAAAAAAEEAAAAAAEAQkAAIECAAgAAAAAAAA=</HashCode>
-      <FileName>Model\FiscalPrinter.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="MCDFiscalManager.BusinessModel.Model.OFD" Collapsed="true">
+  <Class Name="MCDFiscalManager.BusinessModel.Model.OFD">
     <Position X="2.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAQAAAAAAACAA=</HashCode>
       <FileName>Model\OFD.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MCDFiscalManager.BusinessModel.Model.Store" Collapsed="true">
+  <Class Name="MCDFiscalManager.BusinessModel.Model.Store">
     <Position X="4" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAgAAAAEAEAQEAQAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAACAAAgAAAAEAEAQEAQAAAgAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\Store.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MCDFiscalManager.BusinessModel.Model.User" Collapsed="true">
-    <Position X="0.5" Y="2.5" Width="1.5" />
+    <Position X="5.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAAAAAAAEAAAAAAwABAAAAIAAAAAAAAAAAAA=</HashCode>
       <FileName>Model\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MCDFiscalManager.BusinessModel.Model.FiscalPrinter">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACIAEAAAAAAAEEAAAEkAEARkAAIECAAgAAAAAAAA=</HashCode>
+      <FileName>Model\FiscalPrinter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

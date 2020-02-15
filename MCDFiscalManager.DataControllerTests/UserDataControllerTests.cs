@@ -41,10 +41,8 @@ namespace MCDFiscalManager.DataController.Tests
             User user = new User("Ivan", "Ivanov", "Ivanovich");
             UserDataController userDataController = new UserDataController(user);
 
-            // Сохраняем контроллер в биннарный файл.
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileInfo testOut = new FileInfo(Path.Combine(directory.FullName, Guid.NewGuid() + ".bin"));
-            userDataController.SaveDataToFile(formatter, testOut);
+            // Сохраняем контроллер.
+            userDataController.SaveData();
 
             // Созадем еще 1 контроллер и загружаем в него информацию из только что сохраненного файла.
             UserDataController userDataController1 = null;
@@ -53,7 +51,7 @@ namespace MCDFiscalManager.DataController.Tests
             {
                 try
                 {
-                    userDataController1 = new UserDataController(formatter, testOut);
+                    userDataController1 = new UserDataController();
                 }
                 catch (IOException) when (i <= NumberOfRetries)
                 {

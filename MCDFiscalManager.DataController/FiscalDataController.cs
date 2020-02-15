@@ -12,19 +12,14 @@ using GC = System.GC;
 
 namespace MCDFiscalManager.DataController
 {
-    public class FiscalDataController
+    public class FiscalDataController : AuxiliaryDataController<FiscalPrinter>
     {
-        private UserDataController userDataController;
-        private AuxiliaryDataController<Company> companyDataController;
-        private AuxiliaryDataController<OFD> ofdDataController;
-
-
         private Dictionary<string, FiscalPrinter> fiscalPrinters;
         private Dictionary<string, Company> companyByShortName;
         private User user;
         private OFD ofd;
-        private Excel.Application excelApplication;
-        private FileInfo storeDataFile;
+        private Excel.Application excelApplication; // to remove
+        private FileInfo storeDataFile; //to remove
 
         private Store lastLoadedStore;
 
@@ -54,9 +49,9 @@ namespace MCDFiscalManager.DataController
              OFDDataController ofdData) : this(storeData)
         {
             storeDataFile = storeData;
-            userDataController = userData;
-            companyDataController = companyData;
-            ofdDataController = ofdData;
+            //userDataController = userData;
+            //companyDataController = companyData;
+            //ofdDataController = ofdData;
         }
         /// <summary>
         /// Загружает данные о фискальных принтерах из CSV-файла заданного формата.
@@ -140,7 +135,8 @@ namespace MCDFiscalManager.DataController
             string modelFP = range.Cells[1, 3].Value.ToString(); //Модель ФП из ячейки 3
             FiscalPrinter fiscalPrinter = new FiscalPrinter(serialNumber: serialNumberFP,
                                                             model: modelFP,
-                                                            placeOfInstallation: storePlace,
+                                                            storePlace,
+                                                            placeOfInstallation: $"{storePlace.Number} {storePlace.Number}",
                                                             registrationDate: null,
                                                             registrationNumber: "",
                                                             fiscalMemory: fiscalMemory,
@@ -158,7 +154,7 @@ namespace MCDFiscalManager.DataController
 
             using (StreamWriter writer = new StreamWriter(file.Create(), Encoding.UTF8))
             {
-                writer.WriteLine(@"Номер ПБО; Серийный номер ККТ; Модель ККТ; Серийный номер ФН; Модель ФН; Почтовый индекс; Код региона; Улица; Дом; Корпус/Литер/Иной признак строения;");
+                writer.WriteLine(@"Номер ПБО; Серийный номер ККТ; Модель ККТ; Серийный номер ФН; Модель ФН; Код региона; Почтовый индекс; Район; Город; Населенный пункт; Улица; Дом; Корпус/Литер/Иной признак строения; ");
             }
 
         }
@@ -178,7 +174,16 @@ namespace MCDFiscalManager.DataController
                                         name: worksheet.Cells[row, 2].Value.ToString(),
                                         owner: own,
                                         trrc: worksheet.Cells[row, 4].Value.ToString(),
-                                        taxAuthoritiesCode: worksheet.Cells[row, 6].Value.ToString());
+                                        taxAuthoritiesCode: worksheet.Cells[row, 6].Value.ToString(),
+                                        adress: new Adress(codeOfRegion: worksheet.Cells[row, 7].Value.ToString(),
+                                                            postcode: worksheet.Cells[row, 8].Value.ToString(),
+                                                            district: worksheet.Cells[row,9].Value,
+                                                            city: worksheet.Cells[row,10].Value,
+                                                            locality: worksheet.Cells[row, 11].Value,
+                                                            street: worksheet.Cells[row,12].Value,
+                                                            house:worksheet.Cells[row,13].Value,
+                                                            building:worksheet.Cells[row,14].Value,
+                                                            flat: worksheet.Cells[row,15].Value));
                     }
                     row++;
                 }
@@ -188,11 +193,12 @@ namespace MCDFiscalManager.DataController
             {
 
                 throw new Exception("Возникла ошибка при поиске данных о ПБО", ex);
-            }
+            } 
             finally
             {
-                workbook.Close(false);
                 worksheet = null;
+                workbook.Close(false);
+                
                 workbook = null;
                 GC.Collect();
             }
@@ -264,8 +270,18 @@ namespace MCDFiscalManager.DataController
         {
             foreach (KeyValuePair<string, FiscalPrinter> temp in fiscalPrinters)
             {
-                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir);
+                XMLDocumentController.CreateRegistrationStatement(temp.Value, user, ofd, outputDir);
             }
+        }
+        public override bool SetCurrentElement(string serialNumber)
+        {
+            FiscalPrinter item = Elements.FirstOrDefault(t => t.SerialNumber == serialNumber);
+            if (item != null)
+            {
+                curentElement = item;
+                return true;
+            }
+            else { return false; }
         }
     }
 }

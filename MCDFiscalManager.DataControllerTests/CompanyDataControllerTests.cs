@@ -36,10 +36,8 @@ namespace MCDFiscalManager.DataController.Tests
             Company company = new Company("ООО НИЛЬС", "ООО НИЛЬС", "000000001", "000");
             CompanyDataController companyDataController = new CompanyDataController(company);
 
-            // Сохраняем контроллер в биннарный файл.
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileInfo testOut = new FileInfo(Path.Combine(directory.FullName, Guid.NewGuid() + ".bin"));
-            companyDataController.SaveDataToFile(formatter, testOut);
+            // Сохраняем контроллер
+            companyDataController.SaveData();
 
             // Созадем еще 1 контроллер и загружаем в него информацию из только что сохраненного файла.
             CompanyDataController companyDataController1 = null;
@@ -48,7 +46,7 @@ namespace MCDFiscalManager.DataController.Tests
             {
                 try
                 {
-                    companyDataController1 = new CompanyDataController(formatter, testOut);
+                    companyDataController1 = new CompanyDataController();
                 }
                 catch (IOException) when (i <= NumberOfRetries)
                 {

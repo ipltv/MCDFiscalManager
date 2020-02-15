@@ -11,21 +11,11 @@ namespace MCDFiscalManager.DataController
 {
     public class OFDDataController : AuxiliaryDataController<OFD>
     {
-        public OFDDataController(IFormatter formatter, FileInfo ofdDataFile) : base(formatter, ofdDataFile) { }
-        public OFDDataController(OFD ofd) : base(ofd.TIN, ofd) { }
-        public override OFD this[string value]
-        {
-            get
-            {
-                OFD result;
-                elements.TryGetValue(value, out result);
-                return result;
-            }
-        }
-
+        public OFDDataController() { }
+        public OFDDataController(OFD ofd) : base(ofd) { }
         public override bool SetCurrentElement(string tin)
         {
-            OFD ofdByTIN = elements.Values.FirstOrDefault(p => p.TIN == tin);
+            OFD ofdByTIN = Elements.FirstOrDefault(p => p.TIN == tin);
             if (ofdByTIN != null)
             {
                 curentElement = ofdByTIN;
@@ -34,22 +24,6 @@ namespace MCDFiscalManager.DataController
             else
             {
                 return false;
-            }
-        }
-
-        public override void AddElement(OFD element)
-        {
-            elements.Add(element.TIN, element);
-        }
-
-        public override void RemoveElement(OFD element)
-        {
-            OFD deletedOFD = elements[element.TIN];
-            elements.Remove(deletedOFD.TIN);
-
-            if (curentElement == deletedOFD)
-            {
-                curentElement = elements.Values.FirstOrDefault(p => p != null);
             }
         }
     }
