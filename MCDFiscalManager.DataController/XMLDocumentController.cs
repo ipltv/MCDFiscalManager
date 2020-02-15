@@ -10,7 +10,7 @@ namespace MCDFiscalManager.DataController
 {
     public class XMLDocumentController
     {
-        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter, User user, OFD ofd, DirectoryInfo outputDir)
+        public static bool CreateRegistrationStatement(FiscalPrinter fiscalPrinter, User user, OFD ofd, DirectoryInfo outputDir)
         {
             XDocument doc = new XDocument();
 
@@ -31,9 +31,9 @@ namespace MCDFiscalManager.DataController
 
             XElement SVNP = new XElement("СвНП");
             XElement NPUL = new XElement("НПЮЛ");
-            XAttribute orgNaim = new XAttribute("НаимОрг", fiscalPrinter.PlaceOfInstallation.Owner.FullName);
-            XAttribute innUL = new XAttribute("ИННЮЛ", fiscalPrinter.PlaceOfInstallation.Owner.TIN);
-            XAttribute kppUL = new XAttribute("КПП", fiscalPrinter.PlaceOfInstallation.TRRC);
+            XAttribute orgNaim = new XAttribute("НаимОрг", fiscalPrinter.Division.Owner.FullName);
+            XAttribute innUL = new XAttribute("ИННЮЛ", fiscalPrinter.Division.Owner.TIN);
+            XAttribute kppUL = new XAttribute("КПП", fiscalPrinter.Division.TRRC);
 
             NPUL.Add(orgNaim, innUL, kppUL);
             SVNP.Add(NPUL);
@@ -52,7 +52,7 @@ namespace MCDFiscalManager.DataController
             document.Add(singer);
 
             XElement statement = new XElement("ЗаявРегККТ");
-            XAttribute codeNOPlace = new XAttribute("КодНОМУст", fiscalPrinter.PlaceOfInstallation.TaxAuthoritiesCode);
+            XAttribute codeNOPlace = new XAttribute("КодНОМУст", fiscalPrinter.Division.TaxAuthoritiesCode);
             XAttribute docType = new XAttribute("ВидДок", "1");
 
             statement.Add(codeNOPlace, docType);
@@ -85,7 +85,7 @@ namespace MCDFiscalManager.DataController
             intelligence.Add(OFD);
 
             XElement installAdress = new XElement("СведАдрМУст");
-            XAttribute installNaim = new XAttribute("НаимМУст", $"{fiscalPrinter.PlaceOfInstallation.Number} {fiscalPrinter.PlaceOfInstallation.Name}");
+            XAttribute installNaim = new XAttribute("НаимМУст", $"{fiscalPrinter.PlaceOfInstallation}");
 
             installAdress.Add(installNaim);
             intelligence.Add(installAdress);

@@ -10,13 +10,12 @@ namespace MCDFiscalManager.DataController
     /// Базовый класс для контроллеров различных вспомогательных данных (компании, ОФД, пользователи).
     /// Это абстрактный класс.
     /// </summary>
-    public abstract class AuxiliaryDataController<T> : IFileData where T: class
+    public abstract class AuxiliaryDataController<T> where T: class
     {
 
         /// <summary>
-        /// Словарь представляющий коллекцию загруженных элементов (пользователь, ОФД и т.д.).
-        /// </summary>
-        protected Dictionary<string, T> elements;
+        /// Список представляющий коллекцию загруженных элементов (пользователь, ОФД и т.д.).
+        /// </summary>      
         protected List<T> elementsList;
         protected IDataSaver dataManager = new DataBaseSaver();
         /// <summary>
@@ -58,38 +57,34 @@ namespace MCDFiscalManager.DataController
         /// </summary>
         /// <param name="formatter">Форматер для десериализации данных из файла.</param>
         /// <param name="userDataFile">Файл с данными о пользователях.</param>
-        protected AuxiliaryDataController(IFormatter formatter, FileInfo userDataFile)
+        protected AuxiliaryDataController()
         {
-            curentElement = default(T);
-            LoadDataFromFile(formatter, userDataFile);
+            Load();
+            curentElement = elementsList.FirstOrDefault();
         }
         /// <summary>
         /// Создает новый объект UserDataController на основе переданного пользователя.
         /// 
         /// </summary>
         /// <param name="newUser"></param>
-        protected AuxiliaryDataController(string key, T newElement)
+        protected AuxiliaryDataController(T newElement)
         {
-            elements = new Dictionary<string, T>();
-            elements.Add(key, newElement);
+            elementsList = new List<T>();
+            elementsList.Add(newElement);
             curentElement = newElement;
         }
         /// <summary>
-        /// Загружает данные используя соотвествующий форматтер.
+        /// Загружает данные.
         /// </summary>
-        /// <param name="formatter">Форматтер данных.</param>
-        /// <param name="file">Файл с данными пользователей.</param>
-        public void LoadDataFromFile(IFormatter formatter, FileInfo file)
+        public void LoadData()
         {
             Load();
             curentElement = elementsList.First();
         }
         /// <summary>
-        /// Сохраняет данные спользуя соотвествующий форматтер.
+        /// Сохраняет данные.
         /// </summary>
-        /// <param name="formatter">Форматтер данных</param>
-        /// <param name="file">Файл для </param>
-        public void SaveDataToFile(IFormatter formatter, FileInfo file)
+        public void SaveData()
         {
             Save();
         }
@@ -99,8 +94,21 @@ namespace MCDFiscalManager.DataController
         /// </summary>
         /// <param name="value">Значение признака, по которому выполняется индексация.</param>
         /// <returns>Возвращаемый элемент из справочника.</returns>
-        abstract public T this[string value]
-        { get; }
+        virtual public T this[int value]
+        {
+            get
+            {
+                try
+                {
+                    return elementsList[value];
+
+                }
+                catch
+                {
+                    return default(T);
+                }
+            }
+        }
         /// <summary>
         /// Возвращает текущего выбранный элемент.
         /// </summary>
@@ -115,15 +123,7 @@ namespace MCDFiscalManager.DataController
         /// </summary>
         /// <param name="SetCurrentElement">Устанавливаемый элемент.</param>
         /// <returns>Результат установки текущего элемента.</returns>
-        public virtual bool SetCurrentElement(string value)
-        {
-            if (elements.TryGetValue(value.ToString(), out T tempElement))
-            {
-                curentElement = tempElement;
-                return true;
-            }
-            else { return false; }
-        }
+        public abstract bool SetCurrentElement(string value);
         public virtual bool SetCurrentElement(T element)
         {
             T item = elementsList.Find(t => t == element);
@@ -141,6 +141,7 @@ namespace MCDFiscalManager.DataController
         public virtual void AddElement(T element)
         {
             elementsList.Add(element);
+            Save();
         }
         /// <summary>
         /// Удаляет элемент из правочника.
@@ -148,14 +149,14 @@ namespace MCDFiscalManager.DataController
         /// <param name="element">Удаляемый элемент.</param>
         public virtual void RemoveElement(T element)
         {
+            if (element == curentElement) { curentElement = elementsList.FirstOrDefault(t => t != element); }
             elementsList.Remove(element);
+            Save();
         }
-
         public int Count
         {
             get { return elementsList.Count; }
         }
-
         public IList<T> Elements
         {
             get { return elementsList.AsReadOnly(); }

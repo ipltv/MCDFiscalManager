@@ -35,10 +35,8 @@ namespace MCDFiscalManager.DataController.Tests
             OFD ofd = new OFD("77777777", "OFD NILS");
             OFDDataController ofdDataController = new OFDDataController(ofd);
 
-            // Сохраняем контроллер в биннарный файл.
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileInfo testOut = new FileInfo(Path.Combine(directory.FullName, Guid.NewGuid() + ".bin"));
-            ofdDataController.SaveDataToFile(formatter, testOut);
+            // Сохраняем контроллер.
+            ofdDataController.SaveData();
 
             // Созадем еще 1 контроллер и загружаем в него информацию из только что сохраненного файла.
             OFDDataController ofdDataController1 = null;
@@ -47,7 +45,7 @@ namespace MCDFiscalManager.DataController.Tests
             {
                 try
                 {
-                    ofdDataController1 = new OFDDataController(formatter, testOut);
+                    ofdDataController1 = new OFDDataController();
                 }
                 catch (IOException) when (i <= NumberOfRetries)
                 {

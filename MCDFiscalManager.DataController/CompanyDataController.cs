@@ -11,20 +11,13 @@ namespace MCDFiscalManager.DataController
 {
     public class CompanyDataController : AuxiliaryDataController<Company>
     {
-        public CompanyDataController(BinaryFormatter formatter, FileInfo companyDataFile) : base(formatter, companyDataFile) { }
-        public CompanyDataController(Company newCompany) : base(newCompany.TIN, newCompany) { }
-        public override Company this[string value]
+        public CompanyDataController() { } 
+
+        public CompanyDataController(Company newCompany) : base(newCompany) { }
+
+        public override bool SetCurrentElement(string TIN)
         {
-            get
-            {
-                Company result;
-                elements.TryGetValue(value, out result);
-                return result;
-            }
-        }
-        public override bool SetCurrentElement(string value)
-        {
-            Company result = elements.Values.FirstOrDefault(p => p.TIN == value);
+            Company result = Elements.FirstOrDefault(t => t.TIN == TIN);
             if (result != null)
             {
                 curentElement = result;
@@ -33,20 +26,5 @@ namespace MCDFiscalManager.DataController
             else { return false; }
         }
 
-        public override void AddElement(Company element)
-        {
-            elements.Add(element.TIN, element);
-        }
-
-        public override void RemoveElement(Company element)
-        {
-            Company deletedCompany = elements[element.TIN];
-            elements.Remove(element.TIN);
-
-            if (curentElement == deletedCompany)
-            {
-                curentElement = elements.Values.FirstOrDefault(p => p != null);
-            }
-        }
     }
 }

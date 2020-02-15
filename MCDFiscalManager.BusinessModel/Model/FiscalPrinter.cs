@@ -15,9 +15,11 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Поле представляющее место установки фискального принтера
         /// </summary>
-        private Store placeOfInstallation;
+        private string placeOfInstallation;
+        private Store division;
         private FiscalMemory currentFiscalMemory;
         private Adress currentAdress;
+        private OFD currentOFD;
         #endregion
         #region Properties
         /// <summary>
@@ -42,7 +44,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Место установки фискального принтера.
         /// </summary>
-        public Store PlaceOfInstallation
+        public string PlaceOfInstallation
         {
             get => placeOfInstallation;
             set
@@ -62,6 +64,14 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// Возвращает текущий объект Adress.
         /// </summary>
         public Adress Adress { get { return currentAdress; } }
+        /// <summary>
+        /// Возвращает или устанавливает текущий объект ОФД.
+        /// </summary>
+        public OFD OFD { get => currentOFD; set { currentOFD = value; } }
+        /// <summary>
+        /// Обособленное подразделение, к которому привязан ФР.
+        /// </summary>
+        public Store Division { get => division; set { division = value; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -76,7 +86,8 @@ namespace MCDFiscalManager.BusinessModel.Model
         public FiscalPrinter
             (string serialNumber, 
             string model,
-            Store placeOfInstallation,
+            Store division,
+            string placeOfInstallation = "",
             DateTime? registrationDate = null,         
             string registrationNumber = "", 
             FiscalMemory fiscalMemory = null,
@@ -90,20 +101,26 @@ namespace MCDFiscalManager.BusinessModel.Model
             {
                 throw new ArgumentNullException("Модель фискального принтера не может быть пустой или null.", nameof(model));
             }
+            if (string.IsNullOrWhiteSpace(placeOfInstallation))
+            {
+                placeOfInstallation = $"{division.Number} {division.Name}";
+            }
 
-            PlaceOfInstallation = placeOfInstallation ?? throw new ArgumentNullException("Место установки фискального принтера не может быть null.", nameof(placeOfInstallation));
+            Division = division ?? throw new ArgumentNullException("Подразделение установки фискального принтера не может быть null.", nameof(division));
             RegistrationNumder = registrationNumber ?? throw new ArgumentNullException("Регистрационный номер фискального принтера не может быть null.", nameof(registrationNumber));
+            
+            PlaceOfInstallation = placeOfInstallation;
             SerialNumber = serialNumber;
             Model = model;
             RegistrationDate = registrationDate;          
             currentFiscalMemory = fiscalMemory;
-            currentAdress = adress;
+            currentAdress = adress ?? Division.Adress;
         }
         #endregion
         #region Methods
         public override string ToString()
         {
-            return $"[Serial Number:{SerialNumber}; Model:{Model}; Registration Date:{RegistrationDate}; Place Of Installation:{PlaceOfInstallation}; Registration Numder:{RegistrationNumder}; Fiscal Memory:{currentFiscalMemory};]";
+            return $"[Serial Number:{SerialNumber}; Model:{Model}; Registration Date:{RegistrationDate}; Place Of Installation:{PlaceOfInstallation}; Registration Numder:{RegistrationNumder}; Fiscal Memory:{currentFiscalMemory}; OFD:{OFD}; Division:{Division};]";
         }
         public override int GetHashCode()
         {

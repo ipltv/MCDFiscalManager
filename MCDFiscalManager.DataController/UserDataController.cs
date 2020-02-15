@@ -13,20 +13,11 @@ namespace MCDFiscalManager.DataController
     /// </summary>
     public class UserDataController : AuxiliaryDataController<User>
     {
-        public UserDataController(IFormatter formatter, FileInfo userDataFile) : base(formatter, userDataFile) {  }
-        public UserDataController(User user): base(user.Surname,user) { }
-        public override User this[string value]
-        {
-            get
-            {
-                User result;
-                elements.TryGetValue(value, out result);
-                return result;
-            }
-        }
+        public UserDataController() { }
+        public UserDataController(User user): base(user) { }
         public override bool SetCurrentElement(string surname)
         {
-            User userBySurname = elements.Values.FirstOrDefault(p => p.Surname == surname);
+            User userBySurname = Elements.FirstOrDefault(p => p.Surname == surname);
             if (userBySurname != null)
             {
                 curentElement = userBySurname;
@@ -34,21 +25,7 @@ namespace MCDFiscalManager.DataController
             }
             else
             {
-                return false;
-            }
-        }
-        public override void AddElement(User element)
-        {
-            elements.Add(element.Surname, element);
-        }
-        public override void RemoveElement(User element)
-        {
-            User deletedUser = elements[element.Surname];
-            elements.Remove(element.Surname);
-
-            if (curentElement == deletedUser)
-            {
-                curentElement = elements.Values.FirstOrDefault(p => p != null);
+                return false; 
             }
         }
     }

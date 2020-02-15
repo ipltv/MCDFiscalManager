@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace MCDFiscalManager.BusinessModel.Model
 {
@@ -11,71 +12,220 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// </summary>
     public class Adress
     {
+        private const int PostcodeMaxLengthConst = 6;
         /// <summary>
         /// ID записи адреса для EF.
         /// </summary>
         public int AdressID { get; set; }
+        #region Fields
+        private string codeOfRegion;
+        private string postcode;
+        private string district;
+        private string city;
+        private string locality;
+        private string street;
+        private string house;
+        private string building;
+        private string flat;
+        #endregion
         #region Properties
         /// <summary>
         /// Задает или возвращает почтовый индекс.
         /// </summary>
-        public string Postcode { get; set; }
+        public string Postcode
+        {
+            get
+            {
+                return postcode;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    postcode = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         /// <summary>
         /// Задает или возвращает код региона.
         /// </summary>
-        public string CodeOfRegion { get; set; }
+        public string CodeOfRegion
+        {
+            get
+            {
+                return codeOfRegion;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+                if (Regex.IsMatch(value, @"^[0-9]{2}$") && value.Length == 2)
+                {
+                    codeOfRegion = value;
+                }
+                else
+                {
+                    throw new ArgumentException(ModelResurses.AdressCodeOfRegionException, nameof(value));
+                }
+
+            }
+        }
+        /// <summary>
+        /// Задает и возвращает район объекта.
+        /// </summary>
+        public string District
+        {
+            get
+            {
+                return district;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    district = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         /// <summary>
         /// Задает или возвращает город объекта.
         /// </summary>
-        public string City { get; set; }
+        public string City
+        {
+            get
+            {
+                return city;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    city = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
+        /// <summary>
+        /// Задает или возвращает населенный пункт.
+        /// </summary>
+        public string Locality
+        {
+            get
+            {
+                return locality;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    locality = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         /// <summary>
         /// Задает или возвращает улицу объекта.
         /// </summary>
-        public string Street { get; set; }
+        public string Street
+        {
+            get
+            {
+                return street;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    street = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         /// <summary>
         /// Задает или возвращает номер дома объекта.
         /// </summary>
-        public string House { get; set; }
+        public string House
+        {
+            get
+            {
+                return house;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    house = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         /// <summary>
         /// Задает или возвращает номер корпуса, строения, литерау
         /// </summary>
-        public string Building { get; set; }
+        public string Building
+        {
+            get
+            {
+                return building;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    building = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
+        /// <summary>
+        /// Задает или возвращает квартиру/офис объекта.
+        /// </summary>
+        public string Flat
+        {
+            get
+            {
+                return flat;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    flat = value;
+                }
+                else throw new ArgumentNullException(nameof(value), ModelResurses.AdressNullException);
+            }
+        }
         #endregion
         #region Contructors
-        public Adress(string postcode, string codeOfRegion, string city, string street, string house, string building)
+        public Adress(string codeOfRegion, 
+            string postcode = "", 
+            string district = "", 
+            string city = "", 
+            string locality = "", 
+            string street = "", 
+            string house = "", 
+            string building = "", 
+            string flat = "")
         {
-            if (string.IsNullOrWhiteSpace(postcode))
-            {
-                throw new ArgumentNullException("Индекс не может быть пустым или null.", nameof(postcode));
-            }
-            if (string.IsNullOrWhiteSpace(codeOfRegion))
-            {
-                throw new ArgumentNullException("Код региона не может быть пустым или null.", nameof(codeOfRegion));
-            }
-            if (string.IsNullOrWhiteSpace(city))
-            {
-                throw new ArgumentNullException("Название города не может быть пустым или null", nameof(city));
-            }
-            if (string.IsNullOrWhiteSpace(street))
-            {
-                throw new ArgumentNullException("Название улицы не может быть пустым или null.", nameof(street));
-            }
-            if (string.IsNullOrWhiteSpace(house))
-            {
-                throw new ArgumentNullException("Номер дома не может быть пустым или null.", nameof(street));
-            }
-            Building = building ?? throw new ArgumentNullException("Номер корпуса не может быть пустым", nameof(building));
-            Postcode = postcode;
+            // Присвоение параметров объекта.
+            // Проверка null и формата данных реализована в свойствах.
+
             CodeOfRegion = codeOfRegion;
+            Postcode = postcode;
+            District = district;
             City = city;
+            Locality = locality;
             Street = street;
             House = house;
+            Building = building;
+            Flat = flat;
         }
         #endregion
         #region Methods 
         public override string ToString()
         {
-            return $"[Postcode:{Postcode}; CodeOfRegion:{CodeOfRegion}; City:{City}; Street:{Street}; House:{House}; Building:{Building};]";
+            return $"[CodeOfRegion:{CodeOfRegion}; Postcode:{Postcode}; District:{District}; City:{City}; Locality:{Locality}; Street:{Street}; House:{House}; Building:{Building}; Flat:{Flat};]";
         }
         public override int GetHashCode()
         {
