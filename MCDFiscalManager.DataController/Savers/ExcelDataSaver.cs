@@ -16,15 +16,58 @@ namespace MCDFiscalManager.DataController.Savers
         
         public List<T> Load<T>() where T : class
         {
-            
+            Excel.Workbook workbook = null;
+            Excel.Worksheet worksheet;
+
+            //if (typeof(T).FullName == typeof(Address).FullName)
+            //{
+            //    FileInfo addresseDataFile = new FileInfo(@".\data\address.xlsx");
+            //    workbook = excelApplication.Workbooks.Open(addresseDataFile.FullName);
+            //    worksheet = workbook.Sheets[1];
+            //    Dictionary<int, Address> addresses = AddressDataLoad(worksheet);
+            //}
+            if (typeof(T).FullName == typeof(Company).FullName)
+            {
+                FileInfo companyDataFile = new FileInfo(@".\data\company.xlsx");
+                workbook = excelApplication.Workbooks.Open(companyDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                Dictionary<int, Company> company = CompanyDataLoad(worksheet);
+            }
+
             if (typeof(T).FullName == typeof(OFD).FullName)
             {
-                return OfdDataLoad(new FileInfo(@".\data\ofd.xlsx")).Cast<T>().ToList();
+                FileInfo ofdDataFile = new FileInfo(@".\data\ofd.xlsx");
+                workbook = excelApplication.Workbooks.Open(ofdDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                return OfdDataLoad(worksheet).Cast<T>().ToList();
             }
             if (typeof(T).FullName == typeof(User).FullName)
             {
-                return UserDataLoad(new FileInfo(@".\data\users.xlsx")).Cast<T>().ToList();
+                FileInfo usersDataFile = new FileInfo(@".\data\users.xlsx");
+                workbook = excelApplication.Workbooks.Open(usersDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                return UserDataLoad(worksheet).Cast<T>().ToList();
             }
+            if (typeof(T).FullName == typeof(Store).FullName)
+            {
+                FileInfo storesDataFile = new FileInfo(@".\data\stores.xlsx");
+                FileInfo companyDataFile = new FileInfo(@".\data\company.xlsx");
+                FileInfo addresseDataFile = new FileInfo(@".\data\address.xlsx");
+
+                workbook = excelApplication.Workbooks.Open(companyDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                Dictionary<int,Company> companyes = CompanyDataLoad(worksheet);
+
+                workbook = excelApplication.Workbooks.Open(addresseDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                Dictionary<int, Address> addresses = AddressDataLoad(worksheet);
+
+                workbook = excelApplication.Workbooks.Open(storesDataFile.FullName);
+                worksheet = workbook.Sheets[1];
+                return StoreDataLoad(worksheet, companyes, addresses).Cast<T>().ToList();
+            }
+            workbook?.Close(false);
+
             return null;
         }
 
@@ -40,13 +83,114 @@ namespace MCDFiscalManager.DataController.Savers
             }
 
         }
-
-        private List<User> UserDataLoad(FileInfo dataFile)
+        public Dictionary<int, Address> AddressDataLoad(Excel.Worksheet worksheet)
+        {
+            var result = new Dictionary<int, Address>();
+            try
+            {
+                int i = 2;
+                while (Convert.ToString(worksheet.Cells[i, 1].Value2) != null)
+                {
+                    try
+                    {
+                        result.Add(Convert.ToInt32(worksheet.Cells[i, 1].Value2), new Address(codeOfRegion: Convert.ToString(worksheet.Cells[i, 2].Value2),
+                                                                                                      postcode: Convert.ToString(worksheet.Cells[i, 3].Value2) ?? "",
+                                                                                                      district: Convert.ToString(worksheet.Cells[i, 4].Value2) ?? "",
+                                                                                                      city: Convert.ToString(worksheet.Cells[i, 5].Value2) ?? "",
+                                                                                                      locality: Convert.ToString(worksheet.Cells[i, 6].Value2) ?? "",
+                                                                                                      street: Convert.ToString(worksheet.Cells[i, 7].Value2) ?? "",
+                                                                                                      house: Convert.ToString(worksheet.Cells[i, 8].Value2) ?? "",
+                                                                                                      building: Convert.ToString(worksheet.Cells[i, 9].Value2) ?? "",
+                                                                                                      flat: Convert.ToString(worksheet.Cells[i, 10].Value2) ?? ""));
+                    }
+                    catch(ArgumentNullException nullEx)
+                    {
+                        WriteLine($"Для строки {i} не задано значение номера ПБО или один из параметров имеет недопустимое значение null. Параметр:{nullEx.ParamName}. Оригинальное сообщение:{Environment.NewLine}{nullEx}");
+                    }
+                    catch(ArgumentException argEx)
+                    {
+                        WriteLine($"Для одного ПБО задано 2 адреса. Повторение в строке {i}. Оригинальное сообщение:{Environment.NewLine}{argEx}");
+                    }
+                    catch(Exception ex)
+                    {
+                        WriteLine($"Возникла ошибка при чтении данных адреса в строке {i}. Оригинальное сообщение:{Environment.NewLine}{ex}");
+                    }
+                    finally
+                    {
+                        i++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine(ex);
+            }
+            return result;
+        }
+        private Dictionary<int,Company> CompanyDataLoad(Excel.Worksheet worksheet)
+        {
+            var result = new Dictionary<int, Company>();
+            try
+            {
+                int i = 2;
+                while(Convert.ToString(worksheet.Cells[i,1].Value2) != null)
+                {
+                    try
+                    {
+                        result.Add(Convert.ToInt32(worksheet.Cells[i, 1].Value2), new Company(fullName: Convert.ToString(worksheet.Cells[i, 2].Value2),
+                                                                                                        shortName: Convert.ToString(worksheet.Cells[i, 3].Value2),
+                                                                                                        tin: Convert.ToString(worksheet.Cells[i, 4].Value2)));
+                    }
+                    catch(ArgumentNullException nullEx)
+                    {
+                        WriteLine($"Для строки {i} не задано значение номера компании или один из параметров имеет недопустимое значение null. Параметр:{nullEx.ParamName}. Оригинальное сообщение:{Environment.NewLine}{nullEx}");
+                    }
+                    catch (ArgumentException argEx)
+                    {
+                        WriteLine($"Повторение номера компании. Номер компании должен быть уникальным. Повторение в строке {i}. Оригинальное сообщение:{Environment.NewLine}{argEx}");
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLine($"Возникла ошибка при чтении данных адреса в строке {i}. Оригинальное сообщение:{Environment.NewLine}{ex}");
+                    }
+                    finally
+                    {
+                        i++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLine(ex);
+            }
+            return result;
+        }
+        private List<Store> StoreDataLoad(Excel.Worksheet worksheet, Dictionary<int,Company> company, Dictionary<int,Address> adresses)
+        {
+            List<Store> result = new List<Store>();
+            try
+            {
+                int i = 2;
+                while(Convert.ToString(worksheet.Cells[i,1].Value2) != null)
+                {
+                    result.Add(new Store(number:worksheet.Cells[i,1].Value2,
+                                         name:worksheet.Cells[i,2].Value2,
+                                         owner: company[Convert.ToInt32(worksheet.Cells[i,3].Value2)],
+                                         trrc:worksheet.Cells[i,4].Value2,
+                                         taxAuthoritiesCode:worksheet.Cells.Cells[i,5].Value2,
+                                         address:adresses[Convert.ToInt32(worksheet.Cells[i,6].Value2)]));
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return result;
+        }
+        private List<User> UserDataLoad(Excel.Worksheet worksheet)
         {
             List<User> result = new List<User>();
-            Excel.Workbook workbook = excelApplication.Workbooks.Open(dataFile.FullName);
-            Excel.Worksheet worksheet = workbook.Sheets[1];
-
             try
             {
                 // TODO: Предусмотреть возможность инициализации из config файла.
@@ -73,11 +217,6 @@ namespace MCDFiscalManager.DataController.Savers
             {
                 // TODO: Проработать обработку исключений
             }       
-            finally
-            {
-                workbook.Close(false, System.Reflection.Missing.Value, System.Reflection.Missing.Value);
-
-            }
             return result;
         }
         private void UserDataSave(FileInfo dataFile, List<User> data)
@@ -116,11 +255,9 @@ namespace MCDFiscalManager.DataController.Savers
                 WriteLine(ex);
             }
         }
-        private List<OFD> OfdDataLoad(FileInfo dataFile)
+        private List<OFD> OfdDataLoad(Excel.Worksheet worksheet)
         {
             List<OFD> result = new List<OFD>();
-            Excel.Workbook workbook = excelApplication.Workbooks.Open(dataFile.FullName);
-            Excel.Worksheet worksheet = workbook.Sheets[1];
 
             try
             {
@@ -146,11 +283,6 @@ namespace MCDFiscalManager.DataController.Savers
             {
                 // TODO: Проработать обработку исключений\
                 Console.WriteLine(ex);
-            }
-            finally
-            {
-                workbook.Close(false, System.Reflection.Missing.Value, System.Reflection.Missing.Value);
-
             }
             return result;
 
