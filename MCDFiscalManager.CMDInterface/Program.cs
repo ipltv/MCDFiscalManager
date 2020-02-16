@@ -61,11 +61,8 @@ namespace MCDFiscalManager.CMDInterface
             //Console.WriteLine("Program is end working. Press Enter for exit...");
             #endregion
             ExcelDataSaver excelDataSaver = new ExcelDataSaver();
-            List<User> users = new List<User>();
-            users.Add(new User("Ирина", "Фоменкова", "Анатольевна"));
-            users.Add(new User("Илья", "Платович", "Ильич"));
-            users.Add(new User("Андрей", "Титков", "Владимирович"));
-            excelDataSaver.Save<User>(users);
+
+            List<Company> addresses = excelDataSaver.Load<Company>();
             excelDataSaver.Dispose();
             GC.Collect();
             Console.ReadLine();

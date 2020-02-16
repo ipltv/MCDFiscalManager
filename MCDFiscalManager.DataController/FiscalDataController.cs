@@ -124,7 +124,7 @@ namespace MCDFiscalManager.DataController
             string houseA = range.Cells[1, 10].Value.ToString(); // Номер дома из ячейки 10
             string buildingA = "";
             if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString(); // Признак строения (корпус, литера и пр.) из ячейки 11, если она не пустая.
-            Adress adress = new Adress(postcode: postcodeA,
+            Address adress = new Address(postcode: postcodeA,
                                         codeOfRegion: codeOfRegionA,
                                         city: city,
                                         street: streetA,
@@ -175,7 +175,7 @@ namespace MCDFiscalManager.DataController
                                         owner: own,
                                         trrc: worksheet.Cells[row, 4].Value.ToString(),
                                         taxAuthoritiesCode: worksheet.Cells[row, 6].Value.ToString(),
-                                        adress: new Adress(codeOfRegion: worksheet.Cells[row, 7].Value.ToString(),
+                                        address: new Address(codeOfRegion: worksheet.Cells[row, 7].Value.ToString(),
                                                             postcode: worksheet.Cells[row, 8].Value.ToString(),
                                                             district: worksheet.Cells[row,9].Value,
                                                             city: worksheet.Cells[row,10].Value,

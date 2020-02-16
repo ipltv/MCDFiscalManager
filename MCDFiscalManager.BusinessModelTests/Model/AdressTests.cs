@@ -14,14 +14,14 @@ namespace MCDFiscalManager.BusinessModel.Model.Tests
         [TestMethod()]
         public void AdressTest()
         {
-            Adress adress = new Adress("76");
+            Address adress = new Address("76");
             Assert.IsNotNull(adress);
         }
 
         [TestMethod()]
         public void ToStringTest()
         {
-            Adress adress = new Adress("76");
+            Address adress = new Address("76");
             string pattern = $"[CodeOfRegion:76; Postcode:; District:; City:; Locality:; Street:; House:; Building:; Flat:;]";
             Assert.AreEqual(adress.ToString(),pattern);
         }

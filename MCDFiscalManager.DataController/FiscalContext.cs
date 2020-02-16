@@ -15,7 +15,7 @@ namespace MCDFiscalManager.DataController
     {
         public FiscalContext() : base("FiscalDBConnection") { }
         
-        public DbSet<Adress> Adresses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<FiscalMemory> FiscalMemories { get; set; }
         public DbSet<FiscalPrinter> FiscalPrinters { get; set; }

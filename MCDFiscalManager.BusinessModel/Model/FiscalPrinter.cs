@@ -18,7 +18,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         private string placeOfInstallation;
         private Store division;
         private FiscalMemory currentFiscalMemory;
-        private Adress currentAdress;
+        private Address currentAdress;
         private OFD currentOFD;
         #endregion
         #region Properties
@@ -63,7 +63,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Возвращает текущий объект Adress.
         /// </summary>
-        public Adress Adress { get { return currentAdress; } }
+        public Address Adress { get { return currentAdress; } }
         /// <summary>
         /// Возвращает или устанавливает текущий объект ОФД.
         /// </summary>
@@ -91,7 +91,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             DateTime? registrationDate = null,         
             string registrationNumber = "", 
             FiscalMemory fiscalMemory = null,
-            Adress adress = null)
+            Address adress = null)
         {
             if (string.IsNullOrWhiteSpace(serialNumber))
             {
@@ -114,7 +114,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             Model = model;
             RegistrationDate = registrationDate;          
             currentFiscalMemory = fiscalMemory;
-            currentAdress = adress ?? Division.Adress;
+            currentAdress = adress ?? Division.Address;
         }
         #endregion
         #region Methods

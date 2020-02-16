@@ -37,10 +37,10 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Адрес ПБО.
         /// </summary>
-        public Adress Adress { get; set; }
+        public Address Address { get; set; }
         #endregion
         #region Constructions
-        public Store (string number, string name, Company owner, string trrc, string taxAuthoritiesCode, Adress adress)
+        public Store (string number, string name, Company owner, string trrc, string taxAuthoritiesCode, Address address)
         {
             if (string.IsNullOrWhiteSpace(number)) throw new ArgumentException("Номер ПБО не может быть пустым.", nameof(number));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Название ПБО не может быть пустым.", nameof(name));
@@ -51,13 +51,13 @@ namespace MCDFiscalManager.BusinessModel.Model
             Number = number.Trim();
             TRRC = trrc.Trim();
             TaxAuthoritiesCode = taxAuthoritiesCode.Trim();
-            Adress = adress ?? throw new ArgumentNullException("Адрес не может быть пустым или null", nameof(adress));
+            Address = address ?? throw new ArgumentNullException("Адрес не может быть пустым или null", nameof(address));
         }
         #endregion
         #region Methods
         public override string ToString()
         {
-            return $"[Number:{Number}; Name:{Name}; Owner: {Owner}; TRRC:{TRRC}; TaxAuthoritiesCode:{TaxAuthoritiesCode}; Adress: {Adress};]";
+            return $"[Number:{Number}; Name:{Name}; Owner: {Owner}; TRRC:{TRRC}; TaxAuthoritiesCode:{TaxAuthoritiesCode}; Adress: {Address};]";
         }
         public override int GetHashCode()
         {

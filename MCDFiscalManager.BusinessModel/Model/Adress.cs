@@ -10,13 +10,13 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// <summary>
     /// Класс представляющий адрес объекта.
     /// </summary>
-    public class Adress
+    public class Address
     {
         private const int PostcodeMaxLengthConst = 6;
         /// <summary>
         /// ID записи адреса для EF.
         /// </summary>
-        public int AdressID { get; set; }
+        public int AddressID { get; set; }
         #region Fields
         private string codeOfRegion;
         private string postcode;
@@ -198,7 +198,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         }
         #endregion
         #region Contructors
-        public Adress(string codeOfRegion, 
+        public Address(string codeOfRegion, 
             string postcode = "", 
             string district = "", 
             string city = "", 
