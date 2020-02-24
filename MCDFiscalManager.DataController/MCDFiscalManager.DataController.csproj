@@ -67,6 +67,7 @@
     <Compile Include="Savers\BinnarySaver.cs" />
     <Compile Include="Savers\DataBaseSaver.cs" />
     <Compile Include="Savers\ExcelDataSaver.cs" />
+    <Compile Include="StoreDataController.cs" />
     <Compile Include="UserDataController.cs" />
     <Compile Include="XMLDocumentController.cs" />
   </ItemGroup>

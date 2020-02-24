@@ -113,6 +113,7 @@
             this.ofdClearButton.TabIndex = 11;
             this.ofdClearButton.Text = "Очистить";
             this.ofdClearButton.UseVisualStyleBackColor = true;
+            this.ofdClearButton.Click += new System.EventHandler(this.ofdClearButton_Click);
             // 
             // OfdForm
             // 

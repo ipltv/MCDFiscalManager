@@ -12,6 +12,7 @@ namespace MCDFiscalManager.WinFormsInterface
         CompanyDataController companyController;
         UserDataController userController;
         OFDDataController ofdController;
+        StoreDataController storeController;
         IDataSaver saver; 
         #endregion
 
@@ -23,6 +24,7 @@ namespace MCDFiscalManager.WinFormsInterface
             companyController = new CompanyDataController(saver);
             userController = new UserDataController(saver);
             ofdController = new OFDDataController(saver);
+            storeController = new StoreDataController(saver);
         }
 
         private void компанииToolStripMenuItem_Click(object sender, EventArgs e)
@@ -52,6 +54,12 @@ namespace MCDFiscalManager.WinFormsInterface
         {
             OfdDataForm ofdDataForm = new OfdDataForm(ofdController);
             ofdDataForm.Show(this);
+        }
+
+        private void пБОToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StoreDataForm storeDataForm = new StoreDataForm(storeController, companyController);
+            storeDataForm.Show(this);
         }
     }
 }

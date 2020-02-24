@@ -90,6 +90,7 @@
             this.пБОToolStripMenuItem.Name = "пБОToolStripMenuItem";
             this.пБОToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.пБОToolStripMenuItem.Text = "ПБО";
+            this.пБОToolStripMenuItem.Click += new System.EventHandler(this.пБОToolStripMenuItem_Click);
             // 
             // фискальныеРегистраторыToolStripMenuItem
             // 

@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MCDFiscalManager.WinFormsInterface.OfdDataSubForms
+namespace MCDFiscalManager.WinFormsInterface.StoreDataSubForms
 {
-    public partial class OfdForm : Form
+    public partial class StoreForm : Form
     {
-        public OfdForm()
+        public StoreForm()
         {
             InitializeComponent();
         }
 
-        private void ofdClearButton_Click(object sender, EventArgs e)
+        private void storeClearButton_Click(object sender, EventArgs e)
         {
             foreach (Control item in this.Controls)
             {
