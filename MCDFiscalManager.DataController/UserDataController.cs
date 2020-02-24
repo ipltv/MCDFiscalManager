@@ -15,6 +15,7 @@ namespace MCDFiscalManager.DataController
     {
         public UserDataController() { }
         public UserDataController(User user): base(user) { }
+        public UserDataController(IDataSaver saver) : base(saver) { }
         public override bool SetCurrentElement(string surname)
         {
             User userBySurname = Elements.FirstOrDefault(p => p.Surname == surname);

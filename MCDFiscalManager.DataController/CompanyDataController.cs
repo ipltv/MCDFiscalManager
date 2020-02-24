@@ -15,6 +15,8 @@ namespace MCDFiscalManager.DataController
 
         public CompanyDataController(Company newCompany) : base(newCompany) { }
 
+        public CompanyDataController(IDataSaver saver) : base(saver) { }
+
         public override bool SetCurrentElement(string TIN)
         {
             Company result = Elements.FirstOrDefault(t => t.TIN == TIN);

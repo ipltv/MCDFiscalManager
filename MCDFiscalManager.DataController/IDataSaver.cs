@@ -8,7 +8,7 @@ namespace MCDFiscalManager.DataController
 {
     public interface IDataSaver
     {
-        void Save<T>(List<T> items) where T : class;
+        void Save<T>(IList<T> items) where T : class;
         List<T> Load<T>() where T : class;
     }
 }

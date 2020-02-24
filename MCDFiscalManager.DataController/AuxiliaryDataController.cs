@@ -17,7 +17,8 @@ namespace MCDFiscalManager.DataController
         /// Список представляющий коллекцию загруженных элементов (пользователь, ОФД и т.д.).
         /// </summary>      
         protected List<T> elementsList;
-        protected IDataSaver dataManager = new DataBaseSaver();
+        protected IDataSaver dataManager;
+        protected int lastGotID;
         /// <summary>
         /// Текущий элемент.
         /// </summary>
@@ -72,6 +73,11 @@ namespace MCDFiscalManager.DataController
             elementsList = new List<T>();
             elementsList.Add(newElement);
             curentElement = newElement;
+        }
+        protected AuxiliaryDataController(IDataSaver saver)
+        {
+            dataManager = saver;
+            elementsList = saver.Load<T>();
         }
         /// <summary>
         /// Загружает данные.

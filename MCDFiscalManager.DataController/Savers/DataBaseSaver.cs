@@ -17,7 +17,7 @@ namespace MCDFiscalManager.DataController.Savers
             }
         }
 
-        public void Save<T>(List<T> items) where T : class
+        public void Save<T>(IList<T> items) where T : class
         {
             using (FiscalContext fiscalContext = new FiscalContext())
             {
