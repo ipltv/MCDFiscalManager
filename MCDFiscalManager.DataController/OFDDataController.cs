@@ -13,6 +13,7 @@ namespace MCDFiscalManager.DataController
     {
         public OFDDataController() { }
         public OFDDataController(OFD ofd) : base(ofd) { }
+        public OFDDataController(IDataSaver saver) : base(saver) { }
         public override bool SetCurrentElement(string tin)
         {
             OFD ofdByTIN = Elements.FirstOrDefault(p => p.TIN == tin);
