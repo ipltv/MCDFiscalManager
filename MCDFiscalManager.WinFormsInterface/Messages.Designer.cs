@@ -61,6 +61,15 @@ namespace MCDFiscalManager.WinFormsInterface {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Не верный формат кода региона..
+        /// </summary>
+        internal static string AddressCodeOfRegionFormatError {
+            get {
+                return ResourceManager.GetString("AddressCodeOfRegionFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Коллекция в контроллере не может быть null..
         /// </summary>
         internal static string ControllerCollectionNullExceptionMessage {

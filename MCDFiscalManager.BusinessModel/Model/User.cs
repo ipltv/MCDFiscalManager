@@ -10,13 +10,13 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// Класс представляющий данные о пользователе.
     /// </summary>
     [Serializable]
-    public class User
+    public class User : IIdentifier
     {
         #region Properties
         /// <summary>
         /// Id пользователя для EF.
         /// </summary>
-        public int UserId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Имя пользователя.
         /// </summary>
@@ -43,6 +43,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             Surname = surname;
             Patronymic = patronymic;
         }
+        public User() { }
         #endregion
         #region Methods
         public override string ToString()

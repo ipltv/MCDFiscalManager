@@ -30,11 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.storeDataGridView = new System.Windows.Forms.DataGridView();
+            this.storeBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.editStoreDataButton = new System.Windows.Forms.Button();
             this.addStoreDataButton = new System.Windows.Forms.Button();
             this.deleteStoreButton = new System.Windows.Forms.Button();
-            this.storeBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.storeIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ownerDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,7 +55,6 @@
             this.storeDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
             this.storeDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.storeDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.storeIdDataGridViewTextBoxColumn,
             this.numberDataGridViewTextBoxColumn,
             this.nameDataGridViewTextBoxColumn,
             this.ownerDataGridViewTextBoxColumn,
@@ -71,6 +69,10 @@
             this.storeDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.storeDataGridView.Size = new System.Drawing.Size(1084, 246);
             this.storeDataGridView.TabIndex = 4;
+            // 
+            // storeBindingSource
+            // 
+            this.storeBindingSource.DataSource = typeof(MCDFiscalManager.BusinessModel.Model.Store);
             // 
             // editStoreDataButton
             // 
@@ -101,17 +103,6 @@
             this.deleteStoreButton.Text = "Удалить";
             this.deleteStoreButton.UseVisualStyleBackColor = true;
             this.deleteStoreButton.Click += new System.EventHandler(this.deleteStoreButton_Click);
-            // 
-            // storeBindingSource
-            // 
-            this.storeBindingSource.DataSource = typeof(MCDFiscalManager.BusinessModel.Model.Store);
-            // 
-            // storeIdDataGridViewTextBoxColumn
-            // 
-            this.storeIdDataGridViewTextBoxColumn.DataPropertyName = "StoreId";
-            this.storeIdDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.storeIdDataGridViewTextBoxColumn.Name = "storeIdDataGridViewTextBoxColumn";
-            this.storeIdDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // numberDataGridViewTextBoxColumn
             // 
@@ -178,13 +169,12 @@
         protected internal System.Windows.Forms.Button editStoreDataButton;
         protected internal System.Windows.Forms.Button addStoreDataButton;
         protected internal System.Windows.Forms.Button deleteStoreButton;
-        private System.Windows.Forms.DataGridViewTextBoxColumn storeIdDataGridViewTextBoxColumn;
+        private System.Windows.Forms.BindingSource storeBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn numberDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ownerDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn tRRCDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn taxAuthoritiesCodeDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn addressDataGridViewTextBoxColumn;
-        private System.Windows.Forms.BindingSource storeBindingSource;
     }
 }

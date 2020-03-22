@@ -20,7 +20,7 @@ namespace MCDFiscalManager.WinFormsInterface
         {
             InitializeComponent();
             DirectoryCheck();
-            saver = new BinnarySaver();
+            saver = new DataBaseSaver();
             companyController = new CompanyDataController(saver);
             userController = new UserDataController(saver);
             ofdController = new OFDDataController(saver);
@@ -31,11 +31,6 @@ namespace MCDFiscalManager.WinFormsInterface
         {
             CompanyDataForm companyDataForm = new CompanyDataForm(companyController);
             companyDataForm.Show(this);
-        }
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            saver.Save(companyController.Elements);
-            saver.Save(userController.Elements);
         }
 
         private void DirectoryCheck()

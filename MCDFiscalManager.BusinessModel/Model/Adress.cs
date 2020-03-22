@@ -10,13 +10,14 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// <summary>
     /// Класс представляющий адрес объекта.
     /// </summary>
-    public class Address
+    [Serializable]
+    public class Address : IIdentifier
     {
         private const int PostcodeMaxLengthConst = 6;
         /// <summary>
         /// ID записи адреса для EF.
         /// </summary>
-        public int AddressID { get; set; }
+        public int ID { get; set; }
         #region Fields
         private string codeOfRegion;
         private string postcode;
@@ -221,6 +222,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             Building = building;
             Flat = flat;
         }
+        public Address() { }
         #endregion
         #region Methods 
         public override string ToString()

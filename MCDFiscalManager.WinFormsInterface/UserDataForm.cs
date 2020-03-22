@@ -14,7 +14,6 @@ namespace MCDFiscalManager.WinFormsInterface
         {
             InitializeComponent();
         }
-
         public UserDataForm(UserDataController userController)
         {
             controller = userController ?? throw new ArgumentNullException(nameof(userController), Messages.ControllerNullExceptionMessage);
@@ -30,14 +29,8 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(userDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                for (int i = 0; i < controller.Elements.Count; i++)
-                {
-                    if (controller.Elements[i].UserId == id)
-                    {
-                        controller.RemoveElement(controller.Elements[i]);
-                        i--;
-                    }
-                }
+                var element = from t in controller.Elements where t.ID == id select t;
+                controller.RemoveElement(element.First());
                 userDataGridView.DataSource = controller.Elements;
             }
         }
@@ -52,7 +45,6 @@ namespace MCDFiscalManager.WinFormsInterface
                                          userAddForm.surnameTextBox.Text,
                                          userAddForm.patronymicTextBox.Text);
             controller.AddElement(newUser);
-            newUser.UserId = controller.Elements.Max(t => t.UserId) + 1;
             userDataGridView.DataSource = controller.Elements;
         }
 
@@ -65,7 +57,7 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(userDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                var users = from t in controller.Elements where t.UserId == id select t;
+                var users = from t in controller.Elements where t.ID == id select t;
                 User user = users.First();
 
                 UserForm userAddForm = new UserForm();
@@ -81,6 +73,7 @@ namespace MCDFiscalManager.WinFormsInterface
                 user.Name = userAddForm.nameTextBox.Text;
                 user.Patronymic = userAddForm.patronymicTextBox.Text;
 
+                controller.UpdateElement(user);
                 userDataGridView.DataSource = controller.Elements;
             }
         }

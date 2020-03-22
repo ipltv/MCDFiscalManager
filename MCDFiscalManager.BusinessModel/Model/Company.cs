@@ -8,13 +8,13 @@ using System.Runtime.Serialization;
 namespace MCDFiscalManager.BusinessModel.Model
 {
     [Serializable]
-    public class Company
+    public class Company : IIdentifier
     {
         #region Properties
         /// <summary>
         /// ID компании для EF.
         /// </summary>
-        public int CompanyId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Полное наименование компании.
         /// </summary>
@@ -40,6 +40,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             TIN = tin;
             LegalForm = legalFOrm;
         }
+        public Company() { }
         #endregion
         #region Methods
         public override string ToString()
