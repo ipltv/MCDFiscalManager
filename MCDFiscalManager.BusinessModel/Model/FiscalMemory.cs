@@ -9,13 +9,13 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// <summary>
     /// Класс представляющий фискальную память принтера - фискальный накопитель (ФН).
     /// </summary>
-    public class FiscalMemory
+    public class FiscalMemory : IIdentifier
     {
         #region Properties
         /// <summary>
         /// Id фискальной памяти для EF.
         /// </summary>
-        public int FiscalMemoryId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Серийный номер фискального накопителя. Только для чтения.
         /// </summary>
@@ -66,6 +66,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             RegistrationDate = registrationDate;
             ExpirationDate = expirationDate;
         }
+        public FiscalMemory() { }
         #endregion
         #region Methods
         public override string ToString()

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace MCDFiscalManager.BusinessModel.Model
 {
     [Serializable]
-    public class Store
+    public class Store : IIdentifier
     {
         #region Properties
         /// <summary>
         /// Id ПБО для EF.
         /// </summary>
-        public int StoreId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Номер ПБО.
         /// </summary>
@@ -53,6 +53,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             TaxAuthoritiesCode = taxAuthoritiesCode.Trim();
             Address = address ?? throw new ArgumentNullException("Адрес не может быть пустым или null", nameof(address));
         }
+        public Store() { }
         #endregion
         #region Methods
         public override string ToString()

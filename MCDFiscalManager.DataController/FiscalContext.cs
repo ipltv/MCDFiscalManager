@@ -13,7 +13,10 @@ namespace MCDFiscalManager.DataController
     /// </summary>
     public class FiscalContext : DbContext
     {
-        public FiscalContext() : base("FiscalDBConnection") { }
+        public FiscalContext() : base("FiscalDBConnection") 
+        {
+           
+        }
         
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Company> Companies { get; set; }

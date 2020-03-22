@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace MCDFiscalManager.WinFormsInterface.StoreDataSubForms
 {
@@ -24,6 +25,11 @@ namespace MCDFiscalManager.WinFormsInterface.StoreDataSubForms
                 if (item is TextBox)
                     (item as TextBox).Text = string.Empty;
             }
+        }
+
+        private void storeOkButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

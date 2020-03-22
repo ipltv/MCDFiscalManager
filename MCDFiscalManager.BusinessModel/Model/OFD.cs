@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace MCDFiscalManager.BusinessModel.Model
 {
     [Serializable]
-    public class OFD
+    public class OFD : IIdentifier
     {
         /// <summary>
         /// Id ОФД для EF.
         /// </summary>
-        public int OFDId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// ИНН ОФД.
         /// </summary>
@@ -31,5 +31,6 @@ namespace MCDFiscalManager.BusinessModel.Model
             TIN = tin;
             FullName = fullName;
         }
+        public OFD() { }
     }
 }

@@ -33,7 +33,6 @@ namespace MCDFiscalManager.WinFormsInterface
                                          companyAddForm.companyShortNameTextBox.Text,
                                          companyAddForm.companyTINTextBox.Text);
             controller.AddElement(newCompany);
-            newCompany.CompanyId = controller.Elements.Max(t => t.CompanyId) + 1;
             companyDataGridView.DataSource = controller.Elements;
         }
 
@@ -46,14 +45,8 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(companyDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                for(int i = 0; i < controller.Elements.Count; i++)
-                {
-                    if (controller.Elements[i].CompanyId == id)
-                    {
-                        controller.RemoveElement(controller.Elements[i]);
-                        i--;
-                    }
-                }
+                var element = from t in controller.Elements where t.ID == id select t;
+                controller.RemoveElement(element.First());
                 companyDataGridView.DataSource = controller.Elements;
             }
         }
@@ -67,7 +60,7 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(companyDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                var companies = from t in controller.Elements where t.CompanyId == id select t;
+                var companies = from t in controller.Elements where t.ID == id select t;
                 Company company = companies.First();
 
                 CompanyForm companyAddForm = new CompanyForm();
@@ -82,7 +75,8 @@ namespace MCDFiscalManager.WinFormsInterface
                 company.FullName = companyAddForm.companyFullNameTextBox.Text;
                 company.ShortName = companyAddForm.companyShortNameTextBox.Text;
                 company.TIN = companyAddForm.companyTINTextBox.Text;
-                
+
+                controller.UpdateElement(company);
                 companyDataGridView.DataSource = controller.Elements;
             }
         }

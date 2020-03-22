@@ -36,7 +36,6 @@ namespace MCDFiscalManager.WinFormsInterface
             var newOfd = new OFD(ofdAddForm.tinTextBox.Text,
                                          ofdAddForm.fullNameTextBox.Text);
             controller.AddElement(newOfd);
-            newOfd.OFDId = controller.Elements.Max(t => t.OFDId) + 1;
             ofdDataGridView.DataSource = controller.Elements;
         }
 
@@ -49,14 +48,8 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(ofdDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                for (int i = 0; i < controller.Elements.Count; i++)
-                {
-                    if (controller.Elements[i].OFDId == id)
-                    {
-                        controller.RemoveElement(controller.Elements[i]);
-                        i--;
-                    }
-                }
+                var element = from t in controller.Elements where t.ID == id select t;
+                controller.RemoveElement(element.First());
                 ofdDataGridView.DataSource = controller.Elements;
             }
         }
@@ -70,7 +63,7 @@ namespace MCDFiscalManager.WinFormsInterface
                 bool converted = int.TryParse(ofdDataGridView[0, index].Value.ToString(), out id);
                 if (!converted) return;
 
-                var ofds = from t in controller.Elements where t.OFDId == id select t;
+                var ofds = from t in controller.Elements where t.ID == id select t;
                 OFD ofd = ofds.First();
 
                 OfdForm ofdForm = new OfdForm();
@@ -83,7 +76,8 @@ namespace MCDFiscalManager.WinFormsInterface
 
                 ofd.FullName = ofdForm.fullNameTextBox.Text;
                 ofd.TIN = ofdForm.tinTextBox.Text;
-
+                
+                controller.UpdateElement(ofd);
                 ofdDataGridView.DataSource = controller.Elements;
             }
         }

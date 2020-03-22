@@ -40,6 +40,8 @@
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.numberLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.flatTextBox = new System.Windows.Forms.TextBox();
+            this.flatLabel = new System.Windows.Forms.Label();
             this.buildingTextBox = new System.Windows.Forms.TextBox();
             this.buildingLabel = new System.Windows.Forms.Label();
             this.houseTextBox = new System.Windows.Forms.TextBox();
@@ -56,8 +58,6 @@
             this.postcodeLabel = new System.Windows.Forms.Label();
             this.codeOfRegionTextBox = new System.Windows.Forms.TextBox();
             this.codeOfRegionLabel = new System.Windows.Forms.Label();
-            this.flatTextBox = new System.Windows.Forms.TextBox();
-            this.flatLabel = new System.Windows.Forms.Label();
             this.storeCancelButton = new System.Windows.Forms.Button();
             this.storeOkButton = new System.Windows.Forms.Button();
             this.storeClearButton = new System.Windows.Forms.Button();
@@ -193,6 +193,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Адрес ПБО";
             // 
+            // flatTextBox
+            // 
+            this.flatTextBox.Location = new System.Drawing.Point(129, 245);
+            this.flatTextBox.Name = "flatTextBox";
+            this.flatTextBox.Size = new System.Drawing.Size(261, 20);
+            this.flatTextBox.TabIndex = 28;
+            // 
+            // flatLabel
+            // 
+            this.flatLabel.AutoSize = true;
+            this.flatLabel.Location = new System.Drawing.Point(35, 248);
+            this.flatLabel.Name = "flatLabel";
+            this.flatLabel.Size = new System.Drawing.Size(88, 13);
+            this.flatLabel.TabIndex = 27;
+            this.flatLabel.Text = "Квартира/Офис";
+            // 
             // buildingTextBox
             // 
             this.buildingTextBox.Location = new System.Drawing.Point(129, 219);
@@ -321,22 +337,6 @@
             this.codeOfRegionLabel.TabIndex = 11;
             this.codeOfRegionLabel.Text = "Код региона";
             // 
-            // flatTextBox
-            // 
-            this.flatTextBox.Location = new System.Drawing.Point(129, 245);
-            this.flatTextBox.Name = "flatTextBox";
-            this.flatTextBox.Size = new System.Drawing.Size(261, 20);
-            this.flatTextBox.TabIndex = 28;
-            // 
-            // flatLabel
-            // 
-            this.flatLabel.AutoSize = true;
-            this.flatLabel.Location = new System.Drawing.Point(35, 248);
-            this.flatLabel.Name = "flatLabel";
-            this.flatLabel.Size = new System.Drawing.Size(88, 13);
-            this.flatLabel.TabIndex = 27;
-            this.flatLabel.Text = "Квартира/Офис";
-            // 
             // storeCancelButton
             // 
             this.storeCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -356,6 +356,7 @@
             this.storeOkButton.TabIndex = 12;
             this.storeOkButton.Text = "Ok";
             this.storeOkButton.UseVisualStyleBackColor = true;
+            this.storeOkButton.Click += new System.EventHandler(this.storeOkButton_Click);
             // 
             // storeClearButton
             // 

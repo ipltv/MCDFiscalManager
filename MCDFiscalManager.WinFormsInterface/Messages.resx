@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddressCodeOfRegionFormatError" xml:space="preserve">
+    <value>Не верный формат кода региона.</value>
+  </data>
   <data name="ControllerCollectionNullExceptionMessage" xml:space="preserve">
     <value>Коллекция в контроллере не может быть null.</value>
   </data>

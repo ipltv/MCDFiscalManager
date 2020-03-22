@@ -9,7 +9,7 @@ namespace MCDFiscalManager.BusinessModel.Model
     /// <summary>
     /// Класс представляющий фискальный принтер/регистратор.
     /// </summary>
-    public class FiscalPrinter
+    public class FiscalPrinter : IIdentifier
     {
         #region Fields
         /// <summary>
@@ -25,7 +25,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Id фискального принтера для EF.
         /// </summary>
-        public int FiscalPrinterId { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// Серийный номер фискального принтера. Только для чтения.
         /// </summary>
@@ -116,6 +116,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             currentFiscalMemory = fiscalMemory;
             currentAdress = adress ?? Division.Address;
         }
+        public FiscalPrinter() { }
         #endregion
         #region Methods
         public override string ToString()
