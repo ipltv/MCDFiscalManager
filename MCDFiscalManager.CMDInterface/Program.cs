@@ -14,6 +14,7 @@ namespace MCDFiscalManager.CMDInterface
         private static FileInfo storeDataFile;
         private static FileInfo ofdDataFile;
         private static FileInfo usersDataFile;
+        private static FileInfo companyDataFile;
         private static DirectoryInfo outputDirectory;
         private static DirectoryInfo inputDirectory;
         static void Main(string[] args)
@@ -22,7 +23,7 @@ namespace MCDFiscalManager.CMDInterface
 
 
             FiscalDataController mainData = new FiscalDataController();
-            mainData.LoadCompanyListFromFile(new FileInfo(Environment.CurrentDirectory + @"\bin\company.bin"));
+            mainData.LoadCompanyListFromFile(companyDataFile);
             mainData.LoadUserDataFromTextFile(usersDataFile);
             mainData.LoadOFDDataFromTextFile(ofdDataFile);
             FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
@@ -66,6 +67,7 @@ namespace MCDFiscalManager.CMDInterface
                 DataFileInitialization(appSettingsReader, "StoreDataFilePath", out storeDataFile);
                 DataFileInitialization(appSettingsReader, "OFDDataFilePath", out ofdDataFile);
                 DataFileInitialization(appSettingsReader, "UsersDataFilePath", out usersDataFile);
+                DataFileInitialization(appSettingsReader, "CompanyDataFilePath", out companyDataFile);
                 DirectoryInitialization(appSettingsReader, "InputDirectory", out inputDirectory);
                 DirectoryInitialization(appSettingsReader, "OutputDirectory", out outputDirectory);
 
