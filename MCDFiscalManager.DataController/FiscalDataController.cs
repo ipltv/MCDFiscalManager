@@ -9,6 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using Excel = Microsoft.Office.Interop.Excel;
 using GC = System.GC;
+using Dadata;
+using Dadata.Model;
 
 namespace MCDFiscalManager.DataController
 {
@@ -19,6 +21,7 @@ namespace MCDFiscalManager.DataController
         private User user;
         private OFD ofd;
         private Excel.Application excelApplication;
+        private Dadata.Model.Address address;
 
         private Store lastLoadedStore;
 
@@ -107,7 +110,7 @@ namespace MCDFiscalManager.DataController
                                                             registrationNumber: "",
                                                             fiscalMemory: fiscalMemory,
                                                             adress: adress);
-
+            
             lastLoadedStore = storePlace;
             return fiscalPrinter;
         }
@@ -139,11 +142,17 @@ namespace MCDFiscalManager.DataController
                     if (worksheet.Cells[row, 1].Value.ToString() == storeNumber)
                     {
                         Company own; companyByShortName.TryGetValue(worksheet.Cells[row, 5].Value.ToString(), out own);
+                        string fiasID = worksheet.Cells[row,7].Value.ToString();
+                        var token = "6db25055841906ecbdce72aaff286795ecb1dace";
+                        var api = new SuggestClient(token);
+                        var response = api.FindAddress(fiasID);
+                        address = response.suggestions[0].data;
                         return new Store(number: worksheet.Cells[row, 1].Value.ToString(),
                                         name: worksheet.Cells[row, 2].Value.ToString(),
                                         owner: own,
                                         trrc: worksheet.Cells[row, 4].Value.ToString(),
                                         taxAuthoritiesCode: worksheet.Cells[row, 6].Value.ToString());
+                        
                     }
                     row++;
                 }
@@ -234,7 +243,7 @@ namespace MCDFiscalManager.DataController
         {
             foreach (KeyValuePair<string, FiscalPrinter> temp in fiscalPrinters)
             {
-                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir);
+                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir, address);
             }
         }
     }

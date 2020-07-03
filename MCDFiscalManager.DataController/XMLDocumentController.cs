@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using MCDFiscalManager.BusinessModel.Model;
 using System.IO;
+using Dadata;
+using Dadata.Model;
+
 namespace MCDFiscalManager.DataController
 {
     public class XMLDocumentController
     {
-        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter, User user, OFD ofd, DirectoryInfo outputDir)
+        public static bool CreateXMLDocument(FiscalPrinter fiscalPrinter, User user, OFD ofd, DirectoryInfo outputDir, Dadata.Model.Address address)
         {
             XDocument doc = new XDocument();
 
@@ -60,9 +63,9 @@ namespace MCDFiscalManager.DataController
 
             XElement intelligence = new XElement("СведРегККТ");
             XAttribute modelKKT = new XAttribute("МоделККТ", fiscalPrinter.Model);
-            XAttribute numberKKT = new XAttribute("НомерККТ", fiscalPrinter.SerialNumber);
+            XAttribute numberKKT = new XAttribute("ЗаводНомерККТ", fiscalPrinter.SerialNumber);
             XAttribute modelFN = new XAttribute("МоделФН", fiscalPrinter.FiscalMemory.Model);
-            XAttribute numberFN = new XAttribute("НомерФН", fiscalPrinter.FiscalMemory.SerialNumber);
+            XAttribute numberFN = new XAttribute("ЗаводНомерФН", fiscalPrinter.FiscalMemory.SerialNumber);
             XAttribute markOffline = new XAttribute("ПрАвтоном", "2");
             XAttribute markLottery = new XAttribute("ПрЛотерея", "2");
             XAttribute markExcitement = new XAttribute("ПрАзарт", "2");
@@ -91,15 +94,88 @@ namespace MCDFiscalManager.DataController
             intelligence.Add(installAdress);
 
             XElement adressKKT = new XElement("АдрМУстККТ");
-            XAttribute postCode = new XAttribute("Индекс", fiscalPrinter.Adress.Postcode);
-            XAttribute regionCode = new XAttribute("КодРегион", fiscalPrinter.Adress.CodeOfRegion);
-            XAttribute city = new XAttribute("Город", fiscalPrinter.Adress.City);
-            XAttribute street = new XAttribute("Улица", fiscalPrinter.Adress.Street);
-            XAttribute house = new XAttribute("Дом", fiscalPrinter.Adress.House);
-            XAttribute building = new XAttribute("Корпус", fiscalPrinter.Adress.Building);
+            #region Адрес ФИАС
+            XElement adressFIAS = new XElement("АдрФИАС");
 
-            adressKKT.Add(postCode, regionCode, city, street, house);
-            if (!string.IsNullOrWhiteSpace(building.Value)) adressKKT.Add(building);
+            XAttribute fiasID = new XAttribute("ИдНом", address.fias_id);
+            XAttribute postCode = new XAttribute("Индекс", address.postal_code);
+            
+
+            XElement regionCodeElement = new XElement("Регион", address.region_kladr_id.Substring(0,2));
+
+            
+            XElement municipalAreaElement = new XElement("МуниципРайон", null);
+            if (address.area_type != null && address.area != null)
+            {
+                XAttribute areaType = new XAttribute("ВидКод", address.area_type);
+                XAttribute areaName = new XAttribute("Наим", address.area);
+                municipalAreaElement.Add(areaType, areaName);
+            }
+
+            XElement cityAreaElement = new XElement("ГородСелПоселен", null);
+            if (address.city_type != null && address.city != null)
+            {
+                int cityCode = -1;
+                if (address.city_type_full.Contains("город")) cityCode = 1;
+                if (address.city_type_full.Contains("сел")) cityCode = 2;
+                if (address.city_type_full.Contains("межселенная")) cityCode = 3;
+                if (address.city_type_full.Contains("внутригородской")) cityCode = 4;
+                XAttribute cityType = new XAttribute("ВидКод", cityCode);
+                XAttribute cityName = new XAttribute("Наим", address.city_with_type);
+                cityAreaElement.Add(cityType, cityName);
+            }
+
+            XElement townElement = new XElement("НаселенПункт", null);
+            if (address.city_type_full != null && address.city != null)
+            {
+                XAttribute townType = new XAttribute("Вид", address.city_type_full);
+                XAttribute townName = new XAttribute("Наим", address.city);
+                townElement.Add(townType, townName);
+            }
+
+            XElement planElement = new XElement("ЭлПланСтруктур", null);
+            if (address.city_district_type != null && address.city_district != null)
+            {
+                XAttribute planType = new XAttribute("Вид", address.city_district_type);
+                XAttribute planName = new XAttribute("Наим", address.city_district);
+                planElement.Add(planType, planName);
+            }
+
+            XElement streetElement = new XElement("ЭлУлДорСети", null);
+            if (address.street_type_full != null && address.street != null)
+            {
+                XAttribute streetType = new XAttribute("Тип", address.street_type_full);
+                XAttribute streetName = new XAttribute("Наим", address.street);
+                streetElement.Add(streetType, streetName);
+            }
+
+            //XElement landElement = new XElement("ЗемелУчасток", null);
+            XElement buildingElement = new XElement("Здание", null);
+            if (address.house_type_full != null && address.house != null)
+            {
+                XAttribute buildingType = new XAttribute("Тип", address.house_type_full);
+                string house = address.house;
+                if (address.block_type_full != null && address.block != null)
+                {
+                    house += " " + address.block_type_full + " " + address.block;
+                }
+                XAttribute buildingNum = new XAttribute("Номер", house);
+                buildingElement.Add(buildingType, buildingNum);
+            }
+            //XElement buildingPremisesElement = new XElement("ПомещЗдания", null);
+            //XElement apartmentPremisesElement = new XElement("ПомещКвартиры", null);
+
+            adressFIAS.Add(fiasID, postCode, regionCodeElement);
+            if (municipalAreaElement.HasAttributes || municipalAreaElement.HasElements) adressFIAS.Add(municipalAreaElement);
+            if (cityAreaElement.HasAttributes || municipalAreaElement.HasElements) adressFIAS.Add(cityAreaElement);
+            if (townElement.HasAttributes || townElement.HasElements) adressFIAS.Add(townElement);
+            if (planElement.HasAttributes || planElement.HasElements) adressFIAS.Add(planElement);
+            if (streetElement.HasAttributes || streetElement.HasElements) adressFIAS.Add(streetElement);
+            if (buildingElement.HasAttributes || buildingElement.HasElements) adressFIAS.Add(buildingElement);
+
+            adressKKT.Add(adressFIAS);
+            #endregion
+            
             installAdress.Add(adressKKT);
 
             doc.Add(file);
