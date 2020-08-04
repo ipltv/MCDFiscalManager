@@ -87,19 +87,19 @@ namespace MCDFiscalManager.DataController
             FiscalMemory fiscalMemory = new FiscalMemory(serialNumber: serialNumberFM,
                                                             model: modelFM, null, null);
 
-            string postcodeA = range.Cells[1, 6].Value.ToString();
-            string codeOfRegionA = range.Cells[1, 7].Value.ToString();
-            string city = range.Cells[1, 8].Value.ToString();
-            string streetA = range.Cells[1, 9].Value.ToString();
-            string houseA = range.Cells[1, 10].Value.ToString();
-            string buildingA = "";
-            if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString();
-            Adress adress = new Adress(postcode: postcodeA,
-                                        codeOfRegion: codeOfRegionA,
-                                        city: city,
-                                        street: streetA,
-                                        house: houseA,
-                                        building: buildingA);
+            //string postcodeA = range.Cells[1, 6].Value.ToString();
+            //string codeOfRegionA = range.Cells[1, 7].Value.ToString();
+            //string city = range.Cells[1, 8].Value.ToString();
+            //string streetA = range.Cells[1, 9].Value.ToString();
+            //string houseA = range.Cells[1, 10].Value.ToString();
+            //string buildingA = "";
+            //if (!string.IsNullOrEmpty(range.Cells[1, 11].Value)) buildingA = range.Cells[1, 11].Value.ToString();
+            //Adress adress = new Adress(postcode: postcodeA,
+            //                            codeOfRegion: codeOfRegionA,
+            //                            city: city,
+            //                            street: streetA,
+            //                            house: houseA,
+            //                            building: buildingA);
 
             string serialNumberFP = range.Cells[1, 2].Value.ToString();
             string modelFP = range.Cells[1, 3].Value.ToString();
@@ -109,7 +109,7 @@ namespace MCDFiscalManager.DataController
                                                             registrationDate: null,
                                                             registrationNumber: "",
                                                             fiscalMemory: fiscalMemory,
-                                                            adress: adress);
+                                                            adress: address);
             
             lastLoadedStore = storePlace;
             return fiscalPrinter;
@@ -243,7 +243,7 @@ namespace MCDFiscalManager.DataController
         {
             foreach (KeyValuePair<string, FiscalPrinter> temp in fiscalPrinters)
             {
-                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir, address);
+                XMLDocumentController.CreateXMLDocument(temp.Value, user, ofd, outputDir, temp.Value.Adress);
             }
         }
     }

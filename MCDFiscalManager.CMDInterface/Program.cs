@@ -26,7 +26,7 @@ namespace MCDFiscalManager.CMDInterface
             mainData.LoadCompanyListFromFile(companyDataFile);
             mainData.LoadUserDataFromTextFile(usersDataFile);
             mainData.LoadOFDDataFromTextFile(ofdDataFile);
-            FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
+            //FiscalDataController.CreateTemplateRegistrationFile(outputDirectory);
 
             FileInfo[] files = inputDirectory.GetFiles();
             foreach (FileInfo file in files)
@@ -36,7 +36,7 @@ namespace MCDFiscalManager.CMDInterface
                     try
                     {
                         mainData.LoadPrinterDataFormFile(file);
-                        mainData.CreateXMLFiles(new DirectoryInfo(Environment.CurrentDirectory + @"\output"));
+                        mainData.CreateXMLFiles(outputDirectory);
                     }
                     catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException ex)
                     {

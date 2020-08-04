@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dadata.Model;
 
 namespace MCDFiscalManager.BusinessModel.Model
 {
@@ -17,7 +18,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// </summary>
         private Store placeOfInstallation;
         private FiscalMemory currentFiscalMemory;
-        private Adress currentAdress;
+        private Address currentAdress;
         #endregion
         #region Properties
         /// <summary>
@@ -57,7 +58,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Возвращает текущий объект Adress.
         /// </summary>
-        public Adress Adress { get { return currentAdress; } }
+        public Address Adress { get { return currentAdress; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -76,7 +77,7 @@ namespace MCDFiscalManager.BusinessModel.Model
             DateTime? registrationDate = null,         
             string registrationNumber = "", 
             FiscalMemory fiscalMemory = null,
-            Adress adress = null)
+            Dadata.Model.Address adress = null)
         {
             if (string.IsNullOrWhiteSpace(serialNumber))
             {

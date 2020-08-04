@@ -136,7 +136,7 @@ namespace MCDFiscalManager.DataController
             XElement planElement = new XElement("ЭлПланСтруктур", null);
             if (address.city_district_type != null && address.city_district != null)
             {
-                XAttribute planType = new XAttribute("Вид", address.city_district_type);
+                XAttribute planType = new XAttribute("Тип", address.city_district_type);
                 XAttribute planName = new XAttribute("Наим", address.city_district);
                 planElement.Add(planType, planName);
             }
@@ -174,8 +174,7 @@ namespace MCDFiscalManager.DataController
             if (buildingElement.HasAttributes || buildingElement.HasElements) adressFIAS.Add(buildingElement);
 
             adressKKT.Add(adressFIAS);
-            #endregion
-            
+            #endregion    
             installAdress.Add(adressKKT);
 
             doc.Add(file);
