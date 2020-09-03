@@ -104,25 +104,25 @@ namespace MCDFiscalManager.DataController
             XElement regionCodeElement = new XElement("Регион", address.region_kladr_id.Substring(0,2));
 
             
-            XElement municipalAreaElement = new XElement("МуниципРайон", null);
-            if (address.area_type != null && address.area != null)
-            {
-                XAttribute areaType = new XAttribute("ВидКод", address.area_type);
-                XAttribute areaName = new XAttribute("Наим", address.area);
-                municipalAreaElement.Add(areaType, areaName);
-            }
+            //Legacy
+            //XElement municipalAreaElement = new XElement("МуниципРайон", null);
+            //if (address.area_type != null && address.area != null)
+            //{
+            //    XAttribute areaType = new XAttribute("ВидКод", address.area_type);
+            //    XAttribute areaName = new XAttribute("Наим", address.area);
+            //    municipalAreaElement.Add(areaType, areaName);
+            //}
 
-            XElement cityAreaElement = new XElement("ГородСелПоселен", null);
+            XElement municipalAreaElement = new XElement("МуниципРайон", null);
             if (address.city_type != null && address.city != null)
             {
                 int cityCode = -1;
-                if (address.city_type_full.Contains("город")) cityCode = 1;
-                if (address.city_type_full.Contains("сел")) cityCode = 2;
-                if (address.city_type_full.Contains("межселенная")) cityCode = 3;
-                if (address.city_type_full.Contains("внутригородской")) cityCode = 4;
+                if (address.city_type_full.Contains("муниц")) cityCode = 1;
+                if (address.city_type_full.Contains("город")) cityCode = 2;
+                if (address.city_type_full.Contains("внутри")) cityCode = 3;
                 XAttribute cityType = new XAttribute("ВидКод", cityCode);
                 XAttribute cityName = new XAttribute("Наим", address.city_with_type);
-                cityAreaElement.Add(cityType, cityName);
+                municipalAreaElement.Add(cityType, cityName);
             }
 
             XElement townElement = new XElement("НаселенПункт", null);
@@ -167,7 +167,7 @@ namespace MCDFiscalManager.DataController
 
             adressFIAS.Add(fiasID, postCode, regionCodeElement);
             if (municipalAreaElement.HasAttributes || municipalAreaElement.HasElements) adressFIAS.Add(municipalAreaElement);
-            if (cityAreaElement.HasAttributes || municipalAreaElement.HasElements) adressFIAS.Add(cityAreaElement);
+            //if (cityAreaElement.HasAttributes || municipalAreaElement.HasElements) adressFIAS.Add(cityAreaElement);
             if (townElement.HasAttributes || townElement.HasElements) adressFIAS.Add(townElement);
             if (planElement.HasAttributes || planElement.HasElements) adressFIAS.Add(planElement);
             if (streetElement.HasAttributes || streetElement.HasElements) adressFIAS.Add(streetElement);

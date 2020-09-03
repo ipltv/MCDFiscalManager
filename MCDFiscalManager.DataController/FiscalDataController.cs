@@ -52,6 +52,7 @@ namespace MCDFiscalManager.DataController
                     int i = 2;
                     while (!string.IsNullOrEmpty(sheet.Cells[i, 1].Text))
                     {
+                        var a = sheet.Rows[1];
                         FiscalPrinter tempPrinter = stringDataAnalyzer(sheet.Rows[i]);
                         if (tempPrinter != null)
                         {
@@ -143,7 +144,7 @@ namespace MCDFiscalManager.DataController
                     {
                         Company own; companyByShortName.TryGetValue(worksheet.Cells[row, 5].Value.ToString(), out own);
                         string fiasID = worksheet.Cells[row,7].Value.ToString();
-                        var token = "6db25055841906ecbdce72aaff286795ecb1dace";
+                        var token = "eee67820276f3d41dc41bb04d38d290b2d634724";
                         var api = new SuggestClient(token);
                         var response = api.FindAddress(fiasID);
                         address = response.suggestions[0].data;
