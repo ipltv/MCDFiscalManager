@@ -121,7 +121,7 @@ namespace MCDFiscalManager.DataController
                 if (address.city_type_full.Contains("город")) cityCode = 2;
                 if (address.city_type_full.Contains("внутри")) cityCode = 3;
                 XAttribute cityType = new XAttribute("ВидКод", cityCode);
-                XAttribute cityName = new XAttribute("Наим", address.city_with_type);
+                XAttribute cityName = new XAttribute("Наим", address.city);
                 municipalAreaElement.Add(cityType, cityName);
             }
 
