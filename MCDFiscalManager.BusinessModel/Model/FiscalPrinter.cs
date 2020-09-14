@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dadata.Model;
 
 namespace MCDFiscalManager.BusinessModel.Model
 {
     /// <summary>
     /// Класс представляющий фискальный принтер/регистратор.
     /// </summary>
-    public class FiscalPrinter : IIdentifier
+    public class FiscalPrinter
     {
         #region Fields
         /// <summary>
         /// Поле представляющее место установки фискального принтера
         /// </summary>
-        private string placeOfInstallation;
-        private Store division;
+        private Store placeOfInstallation;
         private FiscalMemory currentFiscalMemory;
         private Address currentAdress;
-        private OFD currentOFD;
         #endregion
         #region Properties
-        /// <summary>
-        /// Id фискального принтера для EF.
-        /// </summary>
-        public int ID { get; set; }
         /// <summary>
         /// Серийный номер фискального принтера. Только для чтения.
         /// </summary>
@@ -44,7 +39,7 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// <summary>
         /// Место установки фискального принтера.
         /// </summary>
-        public string PlaceOfInstallation
+        public Store PlaceOfInstallation
         {
             get => placeOfInstallation;
             set
@@ -64,14 +59,6 @@ namespace MCDFiscalManager.BusinessModel.Model
         /// Возвращает текущий объект Adress.
         /// </summary>
         public Address Adress { get { return currentAdress; } }
-        /// <summary>
-        /// Возвращает или устанавливает текущий объект ОФД.
-        /// </summary>
-        public OFD OFD { get => currentOFD; set { currentOFD = value; } }
-        /// <summary>
-        /// Обособленное подразделение, к которому привязан ФР.
-        /// </summary>
-        public Store Division { get => division; set { division = value; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -86,12 +73,11 @@ namespace MCDFiscalManager.BusinessModel.Model
         public FiscalPrinter
             (string serialNumber, 
             string model,
-            Store division,
-            string placeOfInstallation = "",
+            Store placeOfInstallation,
             DateTime? registrationDate = null,         
             string registrationNumber = "", 
             FiscalMemory fiscalMemory = null,
-            Address adress = null)
+            Dadata.Model.Address adress = null)
         {
             if (string.IsNullOrWhiteSpace(serialNumber))
             {
@@ -101,27 +87,20 @@ namespace MCDFiscalManager.BusinessModel.Model
             {
                 throw new ArgumentNullException("Модель фискального принтера не может быть пустой или null.", nameof(model));
             }
-            if (string.IsNullOrWhiteSpace(placeOfInstallation))
-            {
-                placeOfInstallation = $"{division.Number} {division.Name}";
-            }
 
-            Division = division ?? throw new ArgumentNullException("Подразделение установки фискального принтера не может быть null.", nameof(division));
+            PlaceOfInstallation = placeOfInstallation ?? throw new ArgumentNullException("Место установки фискального принтера не может быть null.", nameof(placeOfInstallation));
             RegistrationNumder = registrationNumber ?? throw new ArgumentNullException("Регистрационный номер фискального принтера не может быть null.", nameof(registrationNumber));
-            
-            PlaceOfInstallation = placeOfInstallation;
             SerialNumber = serialNumber;
             Model = model;
             RegistrationDate = registrationDate;          
             currentFiscalMemory = fiscalMemory;
-            currentAdress = adress ?? Division.Address;
+            currentAdress = adress;
         }
-        public FiscalPrinter() { }
         #endregion
         #region Methods
         public override string ToString()
         {
-            return $"[Serial Number:{SerialNumber}; Model:{Model}; Registration Date:{RegistrationDate}; Place Of Installation:{PlaceOfInstallation}; Registration Numder:{RegistrationNumder}; Fiscal Memory:{currentFiscalMemory}; OFD:{OFD}; Division:{Division};]";
+            return $"[Serial Number:{SerialNumber}; Model:{Model}; Registration Date:{RegistrationDate}; Place Of Installation:{PlaceOfInstallation}; Registration Numder:{RegistrationNumder}; Fiscal Memory:{currentFiscalMemory};]";
         }
         public override int GetHashCode()
         {
